@@ -39,3 +39,10 @@
 
 # debug information files
 *.dwo
+
+
+
+
+# My Folders & Files
+A_Testing/
+tempCodeRunnerFile.cpp
