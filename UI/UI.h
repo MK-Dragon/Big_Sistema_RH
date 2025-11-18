@@ -40,22 +40,31 @@ void printMainMenu(){
     std::cout << "(1) List Employees " << std::endl;
     std::cout << "(2) Add Employee" << std::endl;
 
+    std::cout << std::endl;
+
     std::cout << "(3) Mark Vacation" << std::endl;
     std::cout << "(4) Remove Vacation" << std::endl;
+
+    std::cout << std::endl;
 
     std::cout << "(5) Mark absences" << std::endl;
     std::cout << "(6) Remove absences" << std::endl;
 
+    std::cout << std::endl;
+
     std::cout << "(7) Employee's Monthly Calendar" << std::endl;
+
+    std::cout << std::endl;
 
     std::cout << "(8) Employee's Monthly Report" << std::endl;
 
-    //std::cout << "(9) Employee's Monthly Calendar" << std::endl;
+    std::cout << "(9) Find Employee By Name or ID" << std::endl;
     //std::cout << "(10) Employee's Monthly Calendar" << std::endl;
     //std::cout << "(11) Employee's Monthly Calendar" << std::endl;
 
 
     // Exit
+    std::cout << std::endl;
     std::cout << "(0) Exit" << std::endl;
     std::cout << "\t> "; // for user input
 }
@@ -152,11 +161,25 @@ void printChooseDay(std::string title, std::vector<Date> vac_days, std::vector<D
 
 
 // Find Employee by NAME OR ID
-void printFindEmployee(){
+void printFindEmployee(int maxID){
     clearScreenANSI();
     std::cout << "* " << "Find Employee" << " *" << std::endl;
-    std::cout << "Insert Name or ID" << std::endl;
+    std::cout << "Insert Name or ID (ID between 1 and " << maxID << ")" << std::endl;
     std::cout << "> " << std::endl; // for user input
+}
+
+void printEmployee_Info(Employee emp){
+    clearScreenANSI();
+    std::cout << "* " << emp.name << " *" << std::endl;
+    std::cout << "Departamento: " << emp.name << std::endl;
+    std::cout << "Formação: " << emp.name << std::endl;
+    std::cout << "Notas: " << emp.name << std::endl;
+    
+    std::cout << "-- --" << std::endl;
+}
+
+void printNumberDays(std::string title, std::vector<Date> days){
+    std::cout << title << ": " << days.size() << std::endl;
 }
 
 

@@ -17,6 +17,7 @@ struct HResources
     // Helper Functions
     bool checkEmployeeExists(Employee& emp);
     bool checkEmployeeNameExists(std::string name);
+    bool checkEmployeeIdExists(int id);
     int checkDateExists(Date day, Employee &emp);
 
     // List Employees

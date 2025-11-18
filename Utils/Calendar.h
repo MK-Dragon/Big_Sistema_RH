@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <ctime>
+
 
 #include "../Model/Dates.h"
 
@@ -218,4 +220,30 @@ std::vector <Date> merge_date_lists(std::vector <Date> &dates_a, std::vector <Da
     // return merged list of Dates!
     //std::cout << "\t\tAll Dates " << all_dates.size() << std::endl;
     return all_dates;
+}
+
+
+Date get_current_date(){
+    // 1. Get the current time as a time_t object (seconds since epoch)
+    std::time_t now = std::time(0);
+    
+    // 2. Convert to a local time structure (tm)
+    // Note: localtime returns a pointer to a static object, which can be overwritten.
+    std::tm* ltm = std::localtime(&now);
+    
+    // 3. Extract components
+    // tm_year is years *since 1900*
+    int current_year = 1900 + ltm->tm_year;
+    
+    // tm_mon is the month *since January (0-11)*
+    int current_month = 1 + ltm->tm_mon;
+
+    std::stringstream ss;
+    
+    // Set width to 2 and fill with '0' for the month
+    ss << current_month
+       << "-"
+       << current_year;
+
+    return parse_month_year(ss.str());
 }

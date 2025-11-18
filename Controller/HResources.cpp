@@ -37,6 +37,18 @@ bool HResources::checkEmployeeNameExists(std::string name)
     return false; // Nop! With don't have that one!
 }
 
+bool HResources::checkEmployeeIdExists(int id)
+{
+    for (auto &&e : list_of_employees)
+    {
+        if (id == e.id)
+        {
+            return true; // He/she does Exist!
+        }
+    }
+    return false; // Nop! With don't have that one!
+}
+
 int HResources::checkDateExists(Date day, Employee &emp)
 {
     for (auto &&d : emp.vacations)

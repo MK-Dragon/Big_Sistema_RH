@@ -10,7 +10,8 @@
 #include "Model/Employee.h"
 #include "Model/Dates.h"
 #include "UI/UI.h"
-#include "Utils\CSV_Manager.h"
+#include "Utils/CSV_Manager.h"
+#include "Utils/TypeChecking.h"
 
 
 HResources hr;
@@ -159,7 +160,7 @@ int main()
                 std::cout << "Invalid input. Please enter a number between 0 and 8.\n";
                 continue;
             }
-            if (menu >= 0 && menu <= 8) break;
+            if (menu >= 0 && menu <= 20) break; // TODO: Fix this at the END!
             std::cout << "Please enter a number between 0 and 8.\n";
         }
 
@@ -518,7 +519,79 @@ int main()
                 menu = 0;
                 break;
             
-            
+            case 9: // Find Employee
+                {
+                    // Check No Employees on DB
+                    std::vector <Employee> emps = hr.get_list_employees();
+                    if (emps.size() == 0)
+                    {
+                        showError("Empty DB", "Please Enter some Employees first!");
+                        break;
+                    }
+
+                    int value;
+                    bool valide_emp = false;
+                    while (!valide_emp)
+                    {
+                        // Print Inserte Name or ID
+                        printFindEmployee(hr.next_id-1);
+                        std::getline(std::cin >> std::ws, new_emp_name);
+                        std::cin.clear();
+
+                        value = classifyAndGetValue(new_emp_name);
+                        if (value == -1) // Error
+                        {
+                            showError("Invalid Input", "Please Enter a valide Name or ID.");
+                        }
+                        else if (value == 0) // String Name
+                        {
+                            if (hr.checkEmployeeNameExists(new_emp_name))
+                            {
+                                emp = &hr.get_employee_by_name(new_emp_name);
+                                valide_emp = true;
+                            }
+                            else
+                            {
+                                showError("Invalid Employee", "Please Enter a valide Name or ID.");
+                            }
+                        }
+                        else // Int ID
+                        {
+                            if (hr.checkEmployeeIdExists(value))
+                            {
+                                emp = &hr.get_employee(value);
+                                valide_emp = true;
+                            }
+                            else
+                            {
+                                showError("Invalid Employee", "Please Enter a valide Name or ID.");
+                            }
+                        }
+                    }
+                    // show emp!
+                    Date current_date = get_current_date();
+                    printEmployee_Info(*emp);
+
+                    std::stringstream title;
+                    title << nomeMes(current_date.month) << " " << current_date.year;
+                    
+                    printCalendarMarked(
+                        title.str(),
+                        diasNoMes(current_date.month, current_date.year),
+                        diaSemana(1, current_date.month, current_date.year),
+                        hr.get_vacation_days(*emp, current_date.month, current_date.year),
+                        'V',
+                        hr.get_absence_days(*emp, current_date.month, current_date.year),
+                        'A'
+                    );
+                    printNumberDays("Number of Vacations", hr.get_vacation_days(*emp, current_date.month, current_date.year));
+                    printNumberDays("Number of Absences", hr.get_absence_days(*emp, current_date.month, current_date.year));
+                }
+
+                showPressAnyKey();
+                menu = 0;
+                break;
+
             default:
                 break;
         }
