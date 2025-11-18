@@ -156,11 +156,11 @@ int main()
             if (!(std::cin >> menu)) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
-                std::cout << "Invalid input. Please enter a number between 0 and 7.\n";
+                std::cout << "Invalid input. Please enter a number between 0 and 8.\n";
                 continue;
             }
-            if (menu >= 0 && menu <= 7) break;
-            std::cout << "Please enter a number between 0 and 7.\n";
+            if (menu >= 0 && menu <= 8) break;
+            std::cout << "Please enter a number between 0 and 8.\n";
         }
 
         // Enter Menu
@@ -454,6 +454,60 @@ int main()
                 menu = 0;
                 break;
 
+            case 8: // Report
+                // get Month & year
+                while (true)
+                {
+                    printEnterValue("Monthly Report", "Month and Year (mm-yyyy)");
+                    std::getline(std::cin >> std::ws, new_day_string);
+                    std::cin.clear();
+
+                    new_day = parse_month_year(new_day_string);
+
+                    // If date is Zero / Error
+                    if (new_day.month == 0 || new_day.year == 0)
+                    {
+                        std::cout << "Invalid Date. Please enter a Mounth or Year.\n";
+                        showPressAnyKey();
+                        continue;
+                    }
+                    break;
+                }
+
+                // Get all Emps with vac/abs for date
+                {
+                    int total_vac = 0;
+                    int total_abs = 0;
+                    std::vector <Date> all_vacations;
+                    std::vector <Date> all_absences;
+
+                    std::vector <Employee> emps_month = hr.get_employee_with_vac_abs(new_day);
+
+                    // print Report!
+                    for (auto &&e : emps_month)
+                    {
+                        // get days
+                        std::vector <Date> vacations = hr.get_vacation_days(e, new_day.month, new_day.year);
+                        std::vector <Date> absences = hr.get_absence_days(e, new_day.month, new_day.year);
+
+                        // print report
+                        printMonthlyReport_Emp(new_day, e.name, vacations, absences);
+
+                        // Math!
+                        total_vac += vacations.size();
+                        total_abs += absences.size();
+                        
+                        // Merge date lists
+                        all_vacations = merge_date_lists(all_vacations, vacations);
+                        all_absences = merge_date_lists(all_absences, absences);
+                    }
+                    printMonthlyReport_Footer(new_day, total_vac, total_abs, all_vacations, all_absences);
+                }
+                showPressAnyKey();
+                menu = 0;
+                break;
+            
+            
             default:
                 break;
         }

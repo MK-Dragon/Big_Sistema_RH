@@ -158,3 +158,40 @@ Date parse_month_year(const std::string& date_str) {
 std::string parse_to_string(Date d){
     return std::to_string(d.day) + "-" + std::to_string(d.month) + "-" + std::to_string(d.year);
 }
+
+
+bool date_eq_date(Date date_a, Date date_b){
+    if (date_a.day == date_b.day &&
+        date_a.month == date_b.month &&
+        date_a.year == date_b.year)
+    {
+        return true;
+    }
+    return false;
+}
+
+std::vector <Date> merge_date_lists(std::vector <Date> &dates_a, std::vector <Date> &dates_b){
+    std::vector <Date> all_dates;
+    for (auto &&d : dates_a)
+    {
+        for (auto &&ad : all_dates) // chack if date in all_dates!
+        {
+            if (!date_eq_date(d, ad))
+            {
+                all_dates.push_back(d);
+            }
+        }
+    }
+    for (auto &&d : dates_b)
+    {
+        for (auto &&ad : all_dates) // chack if date in all_dates!
+        {
+            if (!date_eq_date(d, ad))
+            {
+                all_dates.push_back(d);
+            }
+        }
+    }
+    // return merged list of Dates!
+    return all_dates;
+}

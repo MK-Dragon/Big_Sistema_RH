@@ -56,15 +56,51 @@ int HResources::checkDateExists(Date day, Employee &emp)
     return 0; // Nop! With don't have that one!
 }
 
+bool check_emp_vac_abs_date(Date date, Employee emp)
+{
+    /* checks if emp has vaction or absences in the month&year*/
+    for (auto &&d : emp.vacations)
+    {
+        if (d.month == date.month && d.year == date.year)
+        {
+            return true;
+        } 
+    }
+    for (auto &&d : emp.absences)
+    {
+        if (d.month == date.month && d.year == date.year)
+        {
+            return true;
+        } 
+    }
+    return false;
+}
 
 
 
-// Add & List
+// List Employees
 std::vector <Employee> HResources::get_list_employees()
 {
     return list_of_employees;
 }
 
+// Get ALL Employees with vacation or Absence:
+std::vector <Employee> HResources::get_employee_with_vac_abs(Date date)
+{
+    std::vector <Employee> emps;
+    for (auto &&emp : list_of_employees)
+    {
+        if (check_emp_vac_abs_date(date, emp))
+        {
+            emps.push_back(emp);
+        }
+    }
+    return emps;
+}
+
+
+
+// Add NEW Employee
 void HResources::add_employee(std:: string name)
 {
     Employee new_emp {
@@ -77,9 +113,10 @@ void HResources::add_employee(std:: string name)
     next_id++;
 }
 
+// Add Existing Employee
 void HResources::add_loaded_employee(std:: string name, std::vector<Date> vacations, std::vector<Date> absences)
 {
-    Employee new_emp {
+    Employee new_emp { // TODO change ID! NEED Fixed IDs!
         next_id,
         name,
         vacations,
@@ -90,6 +127,7 @@ void HResources::add_loaded_employee(std:: string name, std::vector<Date> vacati
 }
 
 
+// Get Employees by ID:
 Employee& HResources::get_employee(int emp_id)
 {
     for (int i = 0; i < next_id; i++)
@@ -101,6 +139,22 @@ Employee& HResources::get_employee(int emp_id)
     }
     return list_of_employees[0];
 }
+
+// Get Employees By Name:
+Employee& HResources::get_employee_by_name(std::string name)
+{
+    for (auto &&emp : list_of_employees)
+    {
+        if (emp.name == name)
+        {
+            return emp;
+        }
+        
+    }
+    return list_of_employees[0];
+}
+
+
 
 // Vacation
 void HResources::add_vacation(Employee &emp, Date day)

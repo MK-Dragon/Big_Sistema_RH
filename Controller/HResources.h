@@ -21,12 +21,15 @@ struct HResources
 
     // List Employees
     std::vector <Employee> get_list_employees();
+    std::vector <Employee> get_employee_with_vac_abs(Date date);
 
     // Add Employee
     void add_employee(std:: string name);
     void add_loaded_employee(std:: string name, std::vector<Date> vacations, std::vector<Date> absences);
 
+    // Get Employee:
     Employee& get_employee(int emp_id);
+    Employee& get_employee_by_name(std::string name);
 
     // Vacation
     void add_vacation(Employee &emp, Date day);

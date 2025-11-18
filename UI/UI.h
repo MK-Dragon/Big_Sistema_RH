@@ -48,6 +48,13 @@ void printMainMenu(){
 
     std::cout << "(7) Employee's Monthly Calendar" << std::endl;
 
+    std::cout << "(8) Employee's Monthly Report" << std::endl;
+
+    //std::cout << "(9) Employee's Monthly Calendar" << std::endl;
+    //std::cout << "(10) Employee's Monthly Calendar" << std::endl;
+    //std::cout << "(11) Employee's Monthly Calendar" << std::endl;
+
+
     // Exit
     std::cout << "(0) Exit" << std::endl;
     std::cout << "\t> "; // for user input
@@ -63,16 +70,7 @@ void printAddEmployee_name(){
 
     std::cout << "Name: "; // for user input
 }
-/*void printAddEmployee_birthday(){
-    clearScreenANSI();
-    std::cout << "* Add Employee *" << std::endl;
-    std::cout << "Birthday [d-m-y]: "; // for user input
-}
-void printAddEmployee_phone(){
-    clearScreenANSI();
-    std::cout << "* Add Employee *" << std::endl;
-    std::cout << "Phone: "; // for user input
-}*/
+
 
 
 
@@ -153,6 +151,21 @@ void printChooseDay(std::string title, std::vector<Date> vac_days, std::vector<D
 
 
 
+// Find Employee by NAME OR ID
+void printFindEmployee(){
+    clearScreenANSI();
+    std::cout << "* " << "Find Employee" << " *" << std::endl;
+    std::cout << "Insert Name or ID" << std::endl;
+    std::cout << "> " << std::endl; // for user input
+}
+
+
+
+
+
+
+
+
 // --- Main Calendar Function ---   *** IT WORKS!!! DO NOT TOUCH!!! ***
 void printCalendarMarked(
     const std::string& month_name, 
@@ -230,6 +243,43 @@ void printCalendarMarked(
 
 
 
+// Print Monthly Report
+void printMonthlyReport_Header(Date date){
+    std::cout << "* " << "Monthly Report " << nomeMes(date.month) << " " << date.year << " *" << std::endl;
+    std::cout << "-- --" << std::endl;
+    std::cout << "-- --" << std::endl;
+}
+void printMonthlyReport_Emp(Date date, std::string emp_name, std::vector <Date> vacations, std::vector <Date> absences){
+    printCalendarMarked(
+        emp_name,
+        diasNoMes(date.month, date.year),
+        diaSemana(1, date.month, date.year),
+        vacations,
+        'V',
+        absences,
+        'A'
+    );
+    std::cout << "Number of Vacation days: " << vacations.size() << std::endl;
+    std::cout << "Number of Absente days: " << absences.size() << std::endl;
+    std::cout << "-- --" << std::endl;
+}
+void printMonthlyReport_Footer(Date date, int num_vac, int num_abs, std::vector <Date> vacations, std::vector <Date> absences){
+    std::cout << "\n" << "Totals for " << nomeMes(date.month) << " " << date.year << " *" << std::endl;
+    std::cout << "Number of Vacation days: " << num_vac << std::endl;
+    std::cout << "Number of Absente days: " << num_abs << std::endl;
+    std::cout << std::endl;
+    
+    printCalendarMarked(
+        "Days with Missing Employes",
+        diasNoMes(date.month, date.year),
+        diaSemana(1, date.month, date.year),
+        vacations,
+        'X',
+        absences,
+        'X'
+    );
+    std::cout << std::endl;
+}
 
 
 // General Use
