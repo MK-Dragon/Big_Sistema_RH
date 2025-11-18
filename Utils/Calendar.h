@@ -169,29 +169,53 @@ bool date_eq_date(Date date_a, Date date_b){
     }
     return false;
 }
+bool date_in_list(Date &date, std::vector <Date> &list_dates){
+    for (auto &&d : list_dates) // chack if date in all_dates!
+    {
+        if (date_eq_date(d, date))
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 std::vector <Date> merge_date_lists(std::vector <Date> &dates_a, std::vector <Date> &dates_b){
     std::vector <Date> all_dates;
+    if (dates_a.size() != 0)
+    {
+        all_dates.push_back(dates_a[0]);
+    }
+    else if (dates_b.size() != 0)
+    {
+        all_dates.push_back(dates_b[0]);
+    }
+    else
+    {
+        std::cout << "\tDebug Merge Dates - Lists are Empty!" << std::endl;
+        return all_dates;
+    }
+
+    /*std::cout << "\tDebug Merge Dates" << std::endl;
+    std::cout << "\t\tDate A " << dates_a.size() << std::endl;
+    std::cout << "\t\tDate B " << dates_b.size() << std::endl;*/
+
     for (auto &&d : dates_a)
     {
-        for (auto &&ad : all_dates) // chack if date in all_dates!
+        if (!date_in_list(d, all_dates) || all_dates.size() == 0)
         {
-            if (!date_eq_date(d, ad))
-            {
-                all_dates.push_back(d);
-            }
+            all_dates.push_back(d);
         }
+        
     }
     for (auto &&d : dates_b)
     {
-        for (auto &&ad : all_dates) // chack if date in all_dates!
+        if (!date_in_list(d, all_dates) || all_dates.size() == 0)
         {
-            if (!date_eq_date(d, ad))
-            {
-                all_dates.push_back(d);
-            }
+            all_dates.push_back(d);
         }
     }
     // return merged list of Dates!
+    //std::cout << "\t\tAll Dates " << all_dates.size() << std::endl;
     return all_dates;
 }

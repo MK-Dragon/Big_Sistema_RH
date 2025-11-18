@@ -481,6 +481,10 @@ int main()
                     std::vector <Date> all_vacations;
                     std::vector <Date> all_absences;
 
+                    std::cout << "\n\nDebug:" << std::endl;
+                    std::cout << "\tVac " << all_vacations.size() << std::endl;
+                    std::cout << "\tAbs " << all_absences.size() << std::endl;
+
                     std::vector <Employee> emps_month = hr.get_employee_with_vac_abs(new_day);
 
                     // print Report!
@@ -502,6 +506,13 @@ int main()
                         all_absences = merge_date_lists(all_absences, absences);
                     }
                     printMonthlyReport_Footer(new_day, total_vac, total_abs, all_vacations, all_absences);
+
+                    /*std::cout << "\n\nDebug:" << std::endl;
+                    std::cout << "\tVac " << all_vacations.size() << std::endl;
+                    std::cout << "\tAbs " << all_absences.size() << std::endl;
+
+                    std::vector <Date> all_days = merge_date_lists(all_vacations, all_absences);
+                    std::cout << "\tMissing " << all_days.size() << std::endl;*/
                 }
                 showPressAnyKey();
                 menu = 0;

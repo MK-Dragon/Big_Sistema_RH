@@ -264,11 +264,16 @@ void printMonthlyReport_Emp(Date date, std::string emp_name, std::vector <Date> 
     std::cout << "-- --" << std::endl;
 }
 void printMonthlyReport_Footer(Date date, int num_vac, int num_abs, std::vector <Date> vacations, std::vector <Date> absences){
-    std::cout << "\n" << "Totals for " << nomeMes(date.month) << " " << date.year << " *" << std::endl;
+    std::cout << std::endl;
+    std::cout << std::endl;
+    std::cout << "-- --" << std::endl;
+    std::cout << "-- --" << std::endl;
+
+    std::cout << "* " << "Totals for " << nomeMes(date.month) << " " << date.year << " *" << std::endl;
     std::cout << "Number of Vacation days: " << num_vac << std::endl;
     std::cout << "Number of Absente days: " << num_abs << std::endl;
     std::cout << std::endl;
-    
+
     printCalendarMarked(
         "Days with Missing Employes",
         diasNoMes(date.month, date.year),
