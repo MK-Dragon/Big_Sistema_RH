@@ -57,8 +57,12 @@ void printMainMenu(){
     std::cout << std::endl;
 
     std::cout << "(8) Employee's Monthly Report" << std::endl;
-
     std::cout << "(9) Find Employee By Name or ID" << std::endl;
+
+    std::cout << std::endl;
+
+    std::cout << "(10) Add" << std::endl;
+
     //std::cout << "(10) Employee's Monthly Calendar" << std::endl;
     //std::cout << "(11) Employee's Monthly Calendar" << std::endl;
 
