@@ -23,8 +23,6 @@ bool Check_File_Exists(std::string FILE_NAME)
 
 
 
-
-
 std::vector<std::string> split_string(const std::string& s, char delimiter) {
     std::vector<std::string> tokens;
     
@@ -39,8 +37,6 @@ std::vector<std::string> split_string(const std::string& s, char delimiter) {
     
     return tokens;
 }
-
-
 
 
 
@@ -152,9 +148,7 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
         }
         
         // Save line to File!
-        // TODO: Add Emcription HERE!
-        std::string line_buffer = emp.name + ',' + vacations + "," + absences;
-        //std::string line_buffer = emp.id + ',' + emp.name + ',' + vacations + "," + absences;
+        std::string line_buffer = std::to_string(emp.id) + ',' + emp.name + ',' + vacations + "," + absences;
         ofs <<  encriptar(line_buffer, key) << std::endl;
     }
 
@@ -162,8 +156,6 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
     std::cout << "Data successfully written to " << filename << std::endl;
     return true;
 }
-
-
 
 
 
@@ -213,8 +205,11 @@ std::vector<Employee> read_csv(const std::string& filename) {
         // We expect exactly 3 fields
         if (segments.size() == num_seg) {
             Employee emp;
-            emp.name = segments[0];
+            
             try {
+                emp.id = std::stoi(segments[seg_id]);
+                emp.name = segments[seg_name];
+
                 // Parse Dates:
                 // splite ;
                 std::vector<std::string> vac_strings = split_string(segments[seg_vac], '+');

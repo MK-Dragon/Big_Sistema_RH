@@ -32,6 +32,8 @@ int classifyAndGetValue(const std::string& s) {
         }
     }
 
+    return 0;
+
     // --- 2. Check for Name (allowing spaces and letters) ---
     // Must contain only alphabetic characters and spaces, and must contain at least one letter.
     bool is_name = true;

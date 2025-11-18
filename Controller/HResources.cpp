@@ -136,7 +136,7 @@ void HResources::add_loaded_employee(int id, std:: string name, std::vector<Date
     };
     list_of_employees.push_back(new_emp);
     if (id >= next_id)
-    { next_id = id++; }
+    { id++; next_id = id; }
 }
 
 

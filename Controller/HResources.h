@@ -12,7 +12,7 @@ struct HResources
 {
     // Variables
     std::vector <Employee> list_of_employees;
-    int next_id = 0;
+    int next_id = 1;
 
     // Helper Functions
     bool checkEmployeeExists(Employee& emp);
