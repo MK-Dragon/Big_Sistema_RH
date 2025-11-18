@@ -85,11 +85,18 @@ void printAddEmployee_name(){
 
 // List Employees - Helper Funtion
 void printEmployees(std::vector <Employee> emp_list){
-    for (int i = 0; i < emp_list.size(); i++) {
+    for (auto &&emp : emp_list)
+    {
+        std::cout << "[" << emp.id << "] " << emp.name
+        << " - " << "(Dep)"
+        << "\n";
+    }
+    
+    /*for (int i = 0; i < emp_list.size(); i++) {
         std::cout << i << ") Name: " << emp_list[i].name
                   //<< "\tYear: " << emp_list[i].year
                   << "\n";
-    }
+    }*/
 }
 // List Employees - ** Function **
 void printListOfEmployees(std::vector <Employee> emp_list){

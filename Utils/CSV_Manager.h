@@ -108,7 +108,7 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
     }
 
     // Write the header row
-    ofs << "Name,Vacations,Absences" << std::endl;
+    ofs << "Id,Name,Vacations,Absences" << std::endl;
 
     // Write the data rows
     
@@ -154,6 +154,7 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
         // Save line to File!
         // TODO: Add Emcription HERE!
         std::string line_buffer = emp.name + ',' + vacations + "," + absences;
+        //std::string line_buffer = emp.id + ',' + emp.name + ',' + vacations + "," + absences;
         ofs <<  encriptar(line_buffer, key) << std::endl;
     }
 
@@ -168,6 +169,15 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
 
 
 std::vector<Employee> read_csv(const std::string& filename) {
+    // no  more Magic Numbers! ^_^
+    const int seg_id = 0;
+    const int seg_name = 1;
+    const int seg_vac = 2;
+    const int seg_abs = 3;
+    //const int seg_dep = 4;
+
+    const int num_seg = 4; // total num of segments!
+
     std::vector<Employee> list_employees;
     std::ifstream ifs(filename);
 
@@ -201,14 +211,14 @@ std::vector<Employee> read_csv(const std::string& filename) {
         }
 
         // We expect exactly 3 fields
-        if (segments.size() == 3) {
+        if (segments.size() == num_seg) {
             Employee emp;
             emp.name = segments[0];
             try {
                 // Parse Dates:
                 // splite ;
-                std::vector<std::string> vac_strings = split_string(segments[1], '+');
-                std::vector<std::string> abs_strings = split_string(segments[2], '+');
+                std::vector<std::string> vac_strings = split_string(segments[seg_vac], '+');
+                std::vector<std::string> abs_strings = split_string(segments[seg_abs], '+');
                 // for date in list -> parse to Date
                 for (const auto& date_string : vac_strings)
                 {

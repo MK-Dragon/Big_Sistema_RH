@@ -4,6 +4,7 @@
 #include <string>
 
 #include <locale>
+#include <windows.h>
 
 #include "Controller/HResources.h"
 #include "Controller/HResources.cpp"
@@ -90,25 +91,14 @@ bool get_yes_no(){
 
 int main()
 {
-    /*/ FIX: Use the standard C locale name for UTF-8 (it did NOT! -.-')
-    try {
-        std::locale::global(std::locale("C.UTF-8"));
-        std::cout.imbue(std::locale("C.UTF-8"));
-    } catch (const std::runtime_error& e) {
-        // Fallback in case "C.UTF-8" also fails (e.g., on some older Windows systems)
-        std::cerr << "Warning: Failed to set C.UTF-8 locale. Using default C locale." << std::endl;
-        std::locale::global(std::locale("C"));
-        std::cout.imbue(std::locale("C"));
-    }
-    // This ensures your C++ program *sends* UTF-8 bytes to the console.
-    try {
-        std::locale::global(std::locale("C.UTF-8")); 
-        std::cout.imbue(std::locale("C.UTF-8"));
-    } catch (const std::runtime_error& e) {
-        // Fallback or warning if C.UTF-8 isn't available
-        // It's crucial this part doesn't crash the program.
-        std::cerr << "Warning: UTF-8 locale not available. Display may be corrupted." << std::endl;
-    }*/
+    #ifdef _WIN32
+        SetConsoleOutputCP(CP_UTF8);
+        SetConsoleCP(CP_UTF8);
+        // Habilitar ANSI (se necessário)
+        HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+        DWORD mode = 0;
+        if (GetConsoleMode(hOut, &mode)) SetConsoleMode(hOut, mode | 0x0004);
+    #endif
 
 
     int menu = 0; // Main menu
@@ -123,18 +113,18 @@ int main()
         std:: cout << "main -> Num Emps: " << loaded_emp.size() << "\n";
 
         for (const auto& emp : loaded_emp){
-            hr.add_loaded_employee(emp.name, emp.vacations, emp.absences);
+            hr.add_loaded_employee(emp.id, emp.name, emp.vacations, emp.absences);
         }
     }
     else // Not File found -> Load Demo
     {
-        std::vector<Date> vac = {{31,10,2025}, {30,10,2025}};
-        std::vector<Date> abse = {{7,10,2025}, {8,10,2025}};
+        std::vector<Date> vac = {{31,10,2025}, {30,10,2025}, {17,11,2025}};
+        std::vector<Date> abse = {{7,10,2025}, {8,10,2025}, {18,11,2025}, {19,11,2025}};
 
-        hr.add_loaded_employee("Zé Manel", vac, abse);
-        hr.add_loaded_employee("Ana Pimbão", vac, abse);
-        hr.add_loaded_employee("Lili Canelas", vac, abse);
-        hr.add_loaded_employee("Fernado Fisgado", vac, abse);
+        hr.add_loaded_employee(1, "Zé Manel", vac, abse);
+        hr.add_loaded_employee(2, "Ana Pimbão", vac, abse);
+        hr.add_loaded_employee(3, "Lili Canelas", vac, abse);
+        hr.add_loaded_employee(4, "Fernado Fisgado", vac, abse);
     }
 
 
@@ -482,9 +472,9 @@ int main()
                     std::vector <Date> all_vacations;
                     std::vector <Date> all_absences;
 
-                    std::cout << "\n\nDebug:" << std::endl;
-                    std::cout << "\tVac " << all_vacations.size() << std::endl;
-                    std::cout << "\tAbs " << all_absences.size() << std::endl;
+                    //std::cout << "\n\nDebug:" << std::endl;
+                    //std::cout << "\tVac " << all_vacations.size() << std::endl;
+                    //std::cout << "\tAbs " << all_absences.size() << std::endl;
 
                     std::vector <Employee> emps_month = hr.get_employee_with_vac_abs(new_day);
 

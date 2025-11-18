@@ -126,16 +126,17 @@ void HResources::add_employee(std:: string name)
 }
 
 // Add Existing Employee
-void HResources::add_loaded_employee(std:: string name, std::vector<Date> vacations, std::vector<Date> absences)
+void HResources::add_loaded_employee(int id, std:: string name, std::vector<Date> vacations, std::vector<Date> absences)
 {
     Employee new_emp { // TODO change ID! NEED Fixed IDs!
-        next_id,
+        id,
         name,
         vacations,
         absences
     };
     list_of_employees.push_back(new_emp);
-    next_id++;
+    if (id >= next_id)
+    { next_id = id++; }
 }
 
 
