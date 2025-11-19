@@ -103,6 +103,25 @@ int main()
 
     int menu = 0; // Main menu
     std::string FILE_NAME = "db.csv";
+    std::string FILE_NAME_DEP = "db.csv";
+
+    // Load Department CSV
+    if (Check_File_Exists(FILE_NAME_DEP) == 1)
+    {
+        // READ FILE
+        std:: cout << "main -> Reading File: " << FILE_NAME_DEP << "\n";
+        std::vector<Employee> loaded_emp = read_csv(FILE_NAME_DEP);
+        std:: cout << "main -> Num Emps: " << loaded_emp.size() << "\n";
+
+        for (const auto& emp : loaded_emp){
+            hr.add_loaded_employee(emp.id, emp.name, emp.vacations, emp.absences);
+        }
+    }
+    else // Not File found -> Load Demo
+    {
+        hr.add_department("IT");
+        hr.add_department("HR");
+    }
 
     // Load CSV
     if (Check_File_Exists(FILE_NAME) == 1)
@@ -628,6 +647,11 @@ int main()
     if (!write_csv(FILE_NAME, hr.get_list_employees()))
     {
         showError("Error Saving CSV", "We Could not Save the Data...");
+    }
+    // Save to CSV and Exit
+    if (!write_department_csv(FILE_NAME_DEP, hr.get_list_of_departments()))
+    {
+        showError("Error Saving Department CSV", "We Could not Save the Data...");
     }
     return 0;
 }

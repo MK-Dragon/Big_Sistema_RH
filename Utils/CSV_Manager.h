@@ -247,3 +247,109 @@ std::vector<Employee> read_csv(const std::string& filename) {
 
 
 
+
+
+bool write_department_csv(const std::string& filename, const std::vector<Department>& list_dep) {
+    // Open the file for writing.
+    std::ofstream ofs(filename);
+    
+
+    if (!ofs.is_open()) {
+        // NOTE: If this fails, the directories might not exist. 
+        // C++ ofstream cannot create missing directories.
+        //std::cerr << "🚨 Error: Could not open/create file " << filename << " for writing." << std::endl;
+        //std::cerr << "Please ensure the directory path exists." << std::endl;
+        std::cout << "Creating File and Dir " << filename << std::endl;
+
+        // create Folder and File if needed
+        ofs = create_file_with_dirs(filename);
+        // reTest
+        if (!ofs.is_open())
+        {
+            std::cerr << "Error: Could not open/create file " << filename << " for writing." << std::endl;
+            std::cerr << "Please ensure the directory path exists." << std::endl;
+            return false;
+        }
+    }
+
+    // Write the header row
+    ofs << "Id,Name" << std::endl;
+
+    // Write the data rows
+    
+    for (const auto& dep : list_dep) {
+        
+        
+        // Save line to File!
+        std::string line_buffer = std::to_string(dep.id) + ',' + dep.name_department;
+        ofs <<  encriptar(line_buffer, key) << std::endl;
+    }
+
+    ofs.close();
+    std::cout << "Data successfully written to " << filename << std::endl;
+    return true;
+}
+
+
+std::vector<Department> read_department_csv(const std::string& filename) {
+    // no  more Magic Numbers! ^_^
+    const int seg_id = 0;
+    const int seg_name = 1;
+
+    const int num_seg = 2; // total num of segments!
+
+    std::vector<Department> list_departments;
+    std::ifstream ifs(filename);
+
+    if (!ifs.is_open()) {
+        std::cerr << "Error: Could not open file " << filename << " for reading." << std::endl;
+        return list_departments; // Return an empty vector
+    }
+
+    std::string line;
+    // Read and discard the header line
+    if (!std::getline(ifs, line)) {
+        std::cout << "File is empty or only contains a header." << std::endl;
+        return list_departments;
+    }
+
+    // Read the rest of the lines (data)
+    while (getline(ifs, line)) {
+        std:: cout << "\t\tread_csV -> Reading RAW line: " << line << "\n";
+        line = desencriptar(line, key);
+        std:: cout << "\t\tread_csV -> Reading Decripted line: " << line << "\n";
+
+        std::stringstream ss(line);
+        std::string segment;
+        std::vector<std::string> segments;
+
+        // Split the line by the delimiter (comma)
+        while (getline(ss, segment, ',')) {
+            // Remove potential carriage return from the last field (\r\n for Windows)
+            segment.erase(std::remove(segment.begin(), segment.end(), '\r'), segment.end());
+            segments.push_back(segment);
+        }
+
+        // We expect exactly 3 fields
+        if (segments.size() == num_seg) {
+            Department dep;
+            
+            try {
+                dep.id = std::stoi(segments[seg_id]);
+                dep.name_department = segments[seg_name];
+
+                list_departments.push_back(dep);
+
+            } catch (const std::exception& e) {
+                std::cerr << "Data conversion error on line: " << line << " (" << e.what() << ")" << std::endl;
+            }
+        } else {
+            std::cerr << "Warning: Skipping malformed line with " << segments.size() << " fields: " << line << std::endl;
+        }
+    }
+    ifs.close();
+    std::cout << "Data successfully read from " << filename << std::endl;
+    return list_departments;
+}
+
+
