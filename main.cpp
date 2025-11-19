@@ -128,6 +128,7 @@ int main()
     }
 
 
+    // Main Loop
     while (menu != -1)
     {
         Employee* emp;
@@ -171,6 +172,7 @@ int main()
            
                 
             case 2: // Add Employees
+            {
                 printAddEmployee_name();
                 std::getline(std::cin >> std::ws, new_emp_name);
                 std::cin.clear();
@@ -183,11 +185,14 @@ int main()
                 {
                     hr.add_employee(new_emp_name);
                 }
+            }
+                
                 menu = 0;
                 break;
             
 
             case 3: // Mark Vacation
+            {
                 printChooseEmployee("Mark Vacation", hr.get_list_employees());
                 
                 // Get employee ID
@@ -236,6 +241,7 @@ int main()
                         break;
                     }
                 }
+            }
                 menu = 0;
                 break;
 
@@ -578,6 +584,37 @@ int main()
                     printNumberDays("Number of Absences", hr.get_absence_days(*emp, current_date.month, current_date.year));
                 }
 
+                showPressAnyKey();
+                menu = 0;
+                break;
+
+            case 10: // Add New Department
+                {
+                    std::string dep_name;
+                    while (true)
+                    {
+                        
+                        printAddDepartment_Name(hr.get_list_of_departments());
+
+                        std::getline(std::cin >> std::ws, dep_name);
+                        std::cin.clear();
+
+                        if (hr.checkDepartementNameExists(dep_name))
+                        {
+                            showError("Invalid Departement Name", "The is already a Department with that name");
+                        }
+                        else
+                        {
+                            hr.add_department(dep_name);
+                            break;
+                        }
+                    }
+                }
+                showPressAnyKey();
+                menu = 0;
+                break;
+
+            case 11: // Change Employee's Department
                 showPressAnyKey();
                 menu = 0;
                 break;

@@ -5,8 +5,9 @@
 #include <vector>
 
 #include "Dates.h"
-#include "Notas.h"
-#include "Formacao.h"
+#include "Note.h"
+#include "Course.h"
+#include "Department.h"
 
 
 struct Employee {
@@ -16,6 +17,9 @@ struct Employee {
     std::vector <Date> vacations;
     std::vector <Date> absences;
 
-    std::vector <Nota> notas;
-    std::vector <Formacao> formacoes;
+    Department departement;
+
+    // Later:
+    std::vector <Note> notes;
+    std::vector <Course> courses;
 };

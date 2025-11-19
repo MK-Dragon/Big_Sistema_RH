@@ -35,6 +35,7 @@ void printMainMenu(){
     // Header
     std::cout << "* Main Menu *" << std::endl;
     std::cout << "* --------- *"<< std::endl;
+    std::cout << std::endl;
 
     // Options
     std::cout << "(1) List Employees " << std::endl;
@@ -61,7 +62,8 @@ void printMainMenu(){
 
     std::cout << std::endl;
 
-    std::cout << "(10) Add" << std::endl;
+    std::cout << "(10) Add New Department" << std::endl;
+    std::cout << "(11) Change Employee's Department" << std::endl;
 
     //std::cout << "(10) Employee's Monthly Calendar" << std::endl;
     //std::cout << "(11) Employee's Monthly Calendar" << std::endl;
@@ -95,12 +97,6 @@ void printEmployees(std::vector <Employee> emp_list){
         << " - " << "(Dep)"
         << "\n";
     }
-    
-    /*for (int i = 0; i < emp_list.size(); i++) {
-        std::cout << i << ") Name: " << emp_list[i].name
-                  //<< "\tYear: " << emp_list[i].year
-                  << "\n";
-    }*/
 }
 // List Employees - ** Function **
 void printListOfEmployees(std::vector <Employee> emp_list){
@@ -176,13 +172,13 @@ void printFindEmployee(int maxID){
     clearScreenANSI();
     std::cout << "* " << "Find Employee" << " *" << std::endl;
     std::cout << "Insert Name or ID (ID between 1 and " << maxID << ")" << std::endl;
-    std::cout << "> " << std::endl; // for user input
+    std::cout << "> "; // for user input
 }
 
 void printEmployee_Info(Employee emp){
     clearScreenANSI();
     std::cout << "* " << emp.name << " *" << std::endl;
-    std::cout << "Departamento: " << emp.name << std::endl;
+    std::cout << "Department: " << emp.departement.name_department << std::endl;
     std::cout << "Formação: " << emp.name << std::endl;
     std::cout << "Notas: " << emp.name << std::endl;
     
@@ -319,6 +315,32 @@ void printMonthlyReport_Footer(Date date, int num_vac, int num_abs, std::vector 
     );
     std::cout << std::endl;
 }
+
+
+// Print List of Departments - Helper Funtion
+void printDepartments(std::vector <Department> departments)
+{
+    for (auto &&dep : departments)
+    {
+        std::cout << "> [" << dep.id<< "] " << dep.name_department << std::endl;
+    }
+}
+// Add Departement
+void printAddDepartment_Name(std::vector <Department> departments){
+    clearScreenANSI();
+    std::cout << "* " << "Add New Department" << " *" << std::endl;
+    std::cout << "* " << "------------------" << " *" << std::endl;
+    
+    printDepartments(departments);
+
+    std::cout << std::endl;
+    std::cout << "Enter New Department Name" << std::endl;
+    std::cout << "> "; // for user input
+}
+
+
+
+
 
 
 // General Use

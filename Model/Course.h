@@ -1,11 +1,11 @@
-// Model/Formacao.h
+// Model/Course.h
 
 #pragma once
 #include <string>
 #include <vector>
 
 
-struct Formacao {
+struct Course {
     std::string nome_curso;
-    std::string data_conclusao;
+    std::string completion_date;
 };

@@ -88,6 +88,17 @@ bool check_emp_vac_abs_date(Date date, Employee emp)
     return false;
 }
 
+bool HResources::checkDepartementNameExists(std::string dep_name)
+{
+    for (auto &&dep : department_list)
+    {
+        if (dep.name_department == dep_name)
+        {
+            return true;
+        }
+    }
+    return false;
+}
 
 
 // List Employees
@@ -125,7 +136,7 @@ void HResources::add_employee(std:: string name)
     next_id++;
 }
 
-// Add Existing Employee
+// Add Loaded Employee
 void HResources::add_loaded_employee(int id, std:: string name, std::vector<Date> vacations, std::vector<Date> absences)
 {
     Employee new_emp { // TODO change ID! NEED Fixed IDs!
@@ -138,7 +149,6 @@ void HResources::add_loaded_employee(int id, std:: string name, std::vector<Date
     if (id >= next_id)
     { id++; next_id = id; }
 }
-
 
 // Get Employees by ID:
 Employee& HResources::get_employee(int emp_id)
@@ -188,7 +198,7 @@ void HResources::remove_vacation(Employee &emp, Date day_to_remove)
     emp.vacations.erase(it, emp.vacations.end());
 }
 
-// Vacation
+// Get Vacation
 std::vector<Date> HResources::get_vacation_days(Employee &emp, int month, int year)
 {
     std::vector<Date> vaction_days;
@@ -223,7 +233,7 @@ void HResources::remove_absence(Employee &emp, Date day_to_remove)
     emp.absences.erase(it, emp.absences.end());
 }
 
-// Absences
+// Get Absences
 std::vector<Date> HResources::get_absence_days(Employee &emp, int month, int year)
 {
     std::vector<Date> absence_days;
@@ -242,3 +252,61 @@ std::vector<Date> HResources::get_absence_days(Employee &emp, int month, int yea
     //std::cout << "Vacation size @ Return: " << absence_days.size() << "\n";
     return absence_days;
 }
+
+
+
+// Add NEW Department
+void HResources:: add_department(std::string dep_name)
+{
+    Department new_dep = {
+        next_id_department,
+        dep_name
+    };
+    next_id_department++;
+    department_list.push_back(new_dep);
+}
+// Add Loaded Department
+void HResources:: add_loaded_department(int dep_id, std::string dep_name)
+{
+    Department new_dep = {
+        dep_id,
+        dep_name
+    };
+    department_list.push_back(new_dep);
+    if (dep_id >= next_id_department)
+    { dep_id++; next_id_department = dep_id; }
+}
+
+// Get Departments
+std::vector<Department> HResources::get_list_of_departments()
+{
+    return department_list;
+}
+
+// Get Employes from Departments
+std::vector<Employee> HResources::get_employes_from_department(int id_department)
+{
+    std::vector<Employee> emps;
+    for (auto &&emp : list_of_employees)
+    {
+        if (emp.departement.id == id_department)
+        {
+            emps.push_back(emp);
+        }
+    }
+    return emps;
+}
+
+// Change Employees Department
+void HResources::change_employees_department(Employee &emp, int id_department)
+{
+    for (auto &&dep : department_list)
+    {
+        if (dep.id == id_department)
+        { emp.departement = dep; return; }
+    }
+}
+
+
+
+
