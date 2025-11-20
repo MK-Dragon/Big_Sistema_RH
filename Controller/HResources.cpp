@@ -349,4 +349,31 @@ void HResources::change_employees_department(Employee &emp, int id_department)
 
 
 
+std::vector <StatusDepartment> HResources::run_status_for_department()
+{
+    status_departments.clear();
+    max_abs = 0;
+
+    for (auto &&dep : department_list)
+    {
+        StatusDepartment sd { dep.id };
+        
+        // Add abs from all Emps!
+        std::vector <Employee> emps = get_employes_from_department(dep.id);
+        for (auto &&e : emps)
+        {
+            sd.num_vac += e.vacations.size();
+            sd.num_abs += e.absences.size();
+        }
+        // Check Max
+        if (sd.num_abs > max_abs)
+        {
+            max_abs = sd.num_abs;
+        }
+        // save status from department
+        status_departments.push_back(sd);
+    }
+    return status_departments;
+}
+
 

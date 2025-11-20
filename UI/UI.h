@@ -9,6 +9,7 @@
 #include <iostream>
 #include <conio.h> // Header for _getch()
 #include <vector>
+#include <unordered_map>
 
 #include <iomanip>
 #include <algorithm> // Required for std::find_if
@@ -64,8 +65,10 @@ void printMainMenu(){
 
     std::cout << "(10) Add New Department" << std::endl;
     std::cout << "(11) Change Employee's Department" << std::endl;
+    std::cout << "(12) Department Status" << std::endl;
 
-    //std::cout << "(10) Employee's Monthly Calendar" << std::endl;
+    std::cout << std::endl;
+
     //std::cout << "(11) Employee's Monthly Calendar" << std::endl;
 
 
@@ -350,6 +353,35 @@ void printChooseDepartment_Name_ID(std::vector <Department> departments){
     std::cout << "> "; // for user input
 }
 
+// Department Status
+void printDepartmentStatus(std::vector <Department> deps, std::vector <StatusDepartment> all_status, int max_abs) {
+    clearScreenANSI();
+    std::cout << "* " << "Department Status" << " *" << std::endl;
+    std::cout << "* " << "-----------------" << " *" << std::endl;
+
+    std::cout << "ID" << "\t" << "Name" << "\t\t" << "Vac" << "\t" << "Abs" << std::endl;
+    for (auto &&dep : deps)
+    {
+        // get status
+        StatusDepartment sd;
+        for (auto &&s : all_status)
+        {
+            if (dep.id == s.id)
+            {
+                sd = s;
+            }
+        }
+        if (sd.num_abs == max_abs)
+        {
+            std::cout << ANSI_COLOR_RED << dep.id << "\t" << dep.name_department << "\t\t" << sd.num_vac << "\t" << sd.num_abs << ANSI_COLOR_RESET << std::endl;
+        }
+        else
+        {
+            std::cout << dep.id << "\t" << dep.name_department << "\t\t" << sd.num_vac << "\t" << sd.num_abs << std::endl;
+        }
+        //std::cout << std::endl;
+    }
+}
 
 
 

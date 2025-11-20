@@ -762,6 +762,20 @@ int main()
                 menu = 0;
                 break;
 
+            case 12:
+            {
+                // print status
+                hr.run_status_for_department();
+                printDepartmentStatus(
+                    hr.get_list_of_departments(),
+                    hr.run_status_for_department(),
+                    hr.max_abs
+                );
+            }
+                showPressAnyKey();
+                menu = 0;
+                break;
+
             default:
                 break;
         }

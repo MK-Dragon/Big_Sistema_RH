@@ -2,6 +2,7 @@
 
 #pragma once
 #include <iostream>
+#include <unordered_map>
 
 #include "../Model/Employee.h"
 #include "../Model/Dates.h"
@@ -15,6 +16,8 @@ struct HResources
     int next_id = 1;
     int next_id_department = 1;
     std::vector <Department> department_list;
+    std::vector <StatusDepartment> status_departments;
+    int max_abs = 0;
 
 
     // Helper Functions:
@@ -55,5 +58,8 @@ struct HResources
     Department get_department_by_name(std::string name);
     std::vector<Employee> get_employes_from_department(int id_department);
     void change_employees_department(Employee &emp, int id_department);
+
+    // Status
+    std::vector <StatusDepartment> run_status_for_department();
 };
 
