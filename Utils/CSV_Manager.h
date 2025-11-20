@@ -22,7 +22,6 @@ bool Check_File_Exists(std::string FILE_NAME)
 }
 
 
-
 std::vector<std::string> split_string(const std::string& s, char delimiter) {
     std::vector<std::string> tokens;
     
@@ -37,8 +36,6 @@ std::vector<std::string> split_string(const std::string& s, char delimiter) {
     
     return tokens;
 }
-
-
 
 
 std::ofstream create_file_with_dirs(const std::string& filepath) {
@@ -80,6 +77,34 @@ std::ofstream create_file_with_dirs(const std::string& filepath) {
 }
 
 
+
+// Department helper Funtions
+bool checkDepartementIdExists(int dep_id, std::vector<Department> list_dep)
+{
+    for (auto &&dep : list_dep)
+    {
+        if (dep.id == dep_id)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+Department get_department_from_id(int id, std::vector<Department> list_dep)
+{
+    for (auto &&dep : list_dep)
+    {
+        if (dep.id == id)
+        {
+            return dep;
+        }
+    }
+    return {0, "Null"};
+}
+
+
+
+
 bool write_csv(const std::string& filename, const std::vector<Employee>& list_emp) {
     // Open the file for writing.
     std::ofstream ofs(filename);
@@ -104,7 +129,7 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
     }
 
     // Write the header row
-    ofs << "Id,Name,Vacations,Absences" << std::endl;
+    ofs << "Id,Name,Vacations,Absences,Departement" << std::endl;
 
     // Write the data rows
     
@@ -148,7 +173,7 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
         }
         
         // Save line to File!
-        std::string line_buffer = std::to_string(emp.id) + ',' + emp.name + ',' + vacations + "," + absences;
+        std::string line_buffer = std::to_string(emp.id) + ',' + emp.name + ',' + vacations + "," + absences + "," + std::to_string(emp.departement.id);
         ofs <<  encriptar(line_buffer, key) << std::endl;
     }
 
@@ -160,15 +185,15 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
 
 
 
-std::vector<Employee> read_csv(const std::string& filename) {
+std::vector<Employee> read_csv(const std::string& filename, std::vector<Department> list_dep) {
     // no  more Magic Numbers! ^_^
     const int seg_id = 0;
     const int seg_name = 1;
     const int seg_vac = 2;
     const int seg_abs = 3;
-    //const int seg_dep = 4;
+    const int seg_dep = 4;
 
-    const int num_seg = 4; // total num of segments!
+    const int num_seg = 5; // total num of segments!
 
     std::vector<Employee> list_employees;
     std::ifstream ifs(filename);
@@ -209,6 +234,13 @@ std::vector<Employee> read_csv(const std::string& filename) {
             try {
                 emp.id = std::stoi(segments[seg_id]);
                 emp.name = segments[seg_name];
+
+                // Check and get department
+                int dep_id = std::stoi(segments[seg_dep]);
+                if (checkDepartementIdExists(dep_id, list_dep))
+                {
+                    emp.departement = get_department_from_id(dep_id, list_dep);
+                }
 
                 // Parse Dates:
                 // splite ;

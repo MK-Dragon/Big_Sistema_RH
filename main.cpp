@@ -88,6 +88,116 @@ bool get_yes_no(){
 
 
 
+int choose_employee_name_OR_id(std::vector <Employee> &emps)
+{
+    // Check No Employees on DB
+    //std::vector <Employee> emps = hr.get_list_employees();
+    Employee emp;
+    if (emps.size() == 0)
+    {
+        showError("Empty DB", "Please Enter some Employees first!");
+        return emp.id;
+    }
+
+    int value;
+    bool valide_emp = false;
+    while (!valide_emp)
+    {
+        std::string new_emp_name;
+        // Print Inserte Name or ID
+        printFindEmployee(hr.next_id-1);
+        std::getline(std::cin >> std::ws, new_emp_name);
+        std::cin.clear();
+
+        value = classifyAndGetValue(new_emp_name);
+        if (value == -1) // Error
+        {
+            showError("Invalid Input", "Please Enter a valide Name or ID.");
+        }
+        else if (value == 0) // String Name
+        {
+            if (hr.checkEmployeeNameExists(new_emp_name))
+            {
+                emp = hr.get_employee_by_name(new_emp_name);
+                valide_emp = true;
+            }
+            else
+            {
+                showError("Invalid Employee", "Please Enter a valide Name or ID.");
+            }
+        }
+        else // Int ID
+        {
+            if (hr.checkEmployeeIdExists(value))
+            {
+                emp = hr.get_employee(value);
+                valide_emp = true;
+            }
+            else
+            {
+                showError("Invalid Employee", "Please Enter a valide Name or ID.");
+            }
+        }
+    }
+    return emp.id;
+}
+
+Department choose_department_name_OR_id()
+{
+    // Check No Departements on DB
+    std::vector <Department> deps = hr.get_list_of_departments();
+    Department dep;
+    if (deps.size() == 0)
+    {
+        showError("Empty DB", "Please Enter some Departments first!");
+        return dep;
+    }
+
+    int value;
+    bool valide_dep = false;
+    while (!valide_dep)
+    {
+        std::string new_dep_name;
+        // Print Inserte Name or ID
+        printChooseDepartment_Name_ID(hr.get_list_of_departments());
+        std::getline(std::cin >> std::ws, new_dep_name);
+        std::cin.clear();
+
+        value = classifyAndGetValue(new_dep_name);
+        if (value == -1) // Error
+        {
+            showError("Invalid Input", "Please Enter a valide Name or ID.");
+        }
+        else if (value == 0) // String Name
+        {
+            if (hr.checkDepartementNameExists(new_dep_name))
+            {
+                dep = hr.get_department_by_name(new_dep_name);
+                valide_dep = true;
+            }
+            else
+            {
+                showError("Invalid Employee", "Please Enter a valide Name or ID.");
+            }
+        }
+        else // Int ID
+        {
+            if (hr.checkDepartementIdExists(value))
+            {
+                dep = hr.get_department_from_id(value);
+                valide_dep = true;
+            }
+            else
+            {
+                showError("Invalid Employee", "Please Enter a valide Name or ID.");
+            }
+        }
+    }
+    return dep;
+}
+
+
+
 
 int main()
 {
@@ -103,18 +213,18 @@ int main()
 
     int menu = 0; // Main menu
     std::string FILE_NAME = "db.csv";
-    std::string FILE_NAME_DEP = "db.csv";
+    std::string FILE_NAME_DEP = "db_dep.csv";
 
     // Load Department CSV
     if (Check_File_Exists(FILE_NAME_DEP) == 1)
     {
         // READ FILE
         std:: cout << "main -> Reading File: " << FILE_NAME_DEP << "\n";
-        std::vector<Employee> loaded_emp = read_csv(FILE_NAME_DEP);
-        std:: cout << "main -> Num Emps: " << loaded_emp.size() << "\n";
+        std::vector<Department> loaded_dep = read_department_csv(FILE_NAME_DEP);
+        std:: cout << "main -> Num Emps: " << loaded_dep.size() << "\n";
 
-        for (const auto& emp : loaded_emp){
-            hr.add_loaded_employee(emp.id, emp.name, emp.vacations, emp.absences);
+        for (const auto& dep : loaded_dep){
+            hr.add_loaded_department(dep.id, dep.name_department);
         }
     }
     else // Not File found -> Load Demo
@@ -128,11 +238,11 @@ int main()
     {
         // READ FILE
         std:: cout << "main -> Reading File: " << FILE_NAME << "\n";
-        std::vector<Employee> loaded_emp = read_csv(FILE_NAME);
+        std::vector<Employee> loaded_emp = read_csv(FILE_NAME, hr.get_list_of_departments());
         std:: cout << "main -> Num Emps: " << loaded_emp.size() << "\n";
 
         for (const auto& emp : loaded_emp){
-            hr.add_loaded_employee(emp.id, emp.name, emp.vacations, emp.absences);
+            hr.add_loaded_employee(emp.id, emp.name, emp.vacations, emp.absences, emp.departement.id);
         }
     }
     else // Not File found -> Load Demo
@@ -140,10 +250,10 @@ int main()
         std::vector<Date> vac = {{31,10,2025}, {30,10,2025}, {17,11,2025}};
         std::vector<Date> abse = {{7,10,2025}, {8,10,2025}, {18,11,2025}, {19,11,2025}};
 
-        hr.add_loaded_employee(1, "Zé Manel", vac, abse);
-        hr.add_loaded_employee(2, "Ana Pimbão", vac, abse);
-        hr.add_loaded_employee(3, "Lili Canelas", vac, abse);
-        hr.add_loaded_employee(4, "Fernado Fisgado", vac, abse);
+        hr.add_loaded_employee(1, "Zé Manel", vac, abse, 1);
+        hr.add_loaded_employee(2, "Ana Pimbão", vac, abse, 2);
+        hr.add_loaded_employee(3, "Lili Canelas", vac, abse, 45); // Não deve ter dep
+        hr.add_loaded_employee(4, "Fernado Fisgado", vac, abse, 1);
     }
 
 
@@ -634,6 +744,20 @@ int main()
                 break;
 
             case 11: // Change Employee's Department
+            {
+                // get Emp
+                std::vector <Employee> emps = hr.get_list_employees();
+                int id_emp = choose_employee_name_OR_id(emps);
+
+                emp = &hr.get_employee(id_emp);
+
+                // get Dep
+                Department dep = choose_department_name_OR_id();
+
+                // Add Dep to Emp
+                hr.change_employees_department(*emp, dep.id);
+                //emp.departement = dep;
+            }
                 showPressAnyKey();
                 menu = 0;
                 break;

@@ -23,6 +23,7 @@ struct HResources
     bool checkEmployeeIdExists(int id);
     int checkDateExists(Date day, Employee &emp);
     bool checkDepartementNameExists(std::string dep_name);
+    bool checkDepartementIdExists(int dep_id);
 
     // List Employees:
     std::vector <Employee> get_list_employees();
@@ -30,7 +31,7 @@ struct HResources
 
     // Add Employee:
     void add_employee(std:: string name);
-    void add_loaded_employee(int id, std:: string name, std::vector<Date> vacations, std::vector<Date> absences);
+    void add_loaded_employee(int id, std:: string name, std::vector<Date> vacations, std::vector<Date> absences, int dep_id);
 
     // Get Employee:
     Employee& get_employee(int emp_id);
@@ -50,6 +51,8 @@ struct HResources
     void add_department(std::string dep_name);
     void add_loaded_department(int dep_id, std::string dep_name);
     std::vector<Department> get_list_of_departments();
+    Department get_department_from_id(int id);
+    Department get_department_by_name(std::string name);
     std::vector<Employee> get_employes_from_department(int id_department);
     void change_employees_department(Employee &emp, int id_department);
 };

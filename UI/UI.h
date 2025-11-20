@@ -94,7 +94,7 @@ void printEmployees(std::vector <Employee> emp_list){
     for (auto &&emp : emp_list)
     {
         std::cout << "[" << emp.id << "] " << emp.name
-        << " - " << "(Dep)"
+        << " - " << emp.departement.name_department
         << "\n";
     }
 }
@@ -191,7 +191,7 @@ void printNumberDays(std::string title, std::vector<Date> days){
 
 
 
-
+// Change Emp Department
 
 
 
@@ -337,7 +337,18 @@ void printAddDepartment_Name(std::vector <Department> departments){
     std::cout << "Enter New Department Name" << std::endl;
     std::cout << "> "; // for user input
 }
+// Choose Departement
+void printChooseDepartment_Name_ID(std::vector <Department> departments){
+    clearScreenANSI();
+    std::cout << "* " << "Choose New Department" << " *" << std::endl;
+    std::cout << "* " << "---------------------" << " *" << std::endl;
+    
+    printDepartments(departments);
 
+    std::cout << std::endl;
+    std::cout << "Enter Department ID or Name" << std::endl;
+    std::cout << "> "; // for user input
+}
 
 
 
