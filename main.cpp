@@ -353,7 +353,12 @@ int main()
                     case 0: // Does not Exist -> carry on
                         if (hr.checkVacationOnDepartment(new_day, emp->departement.id))
                         {
-                            showError("Error Marking Vacation", "Someone in the department has vacations that Day.");
+                            printEnterValue("Warning! Someone in the department has vacations that Day", "Mark Vacation anyway? (Y/N)");
+                            if (get_yes_no())
+                            {
+                                hr.add_vacation(*emp, new_day);
+                            }
+                            //showError("Error Marking Vacation", "Someone in the department has vacations that Day.");
                             break;
                         }
                         hr.add_vacation(*emp, new_day);
