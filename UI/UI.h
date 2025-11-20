@@ -69,6 +69,15 @@ void printMainMenu(){
 
     std::cout << std::endl;
 
+    std::cout << "(13) Monthly Dashboard" << std::endl;
+
+    std::cout << std::endl;
+
+    std::cout << "(14) Courses" << std::endl;
+    std::cout << "(15) Notes" << std::endl;
+
+
+    //std::cout << "(11) Employee's Monthly Calendar" << std::endl;
     //std::cout << "(11) Employee's Monthly Calendar" << std::endl;
 
 
@@ -125,7 +134,7 @@ void printEnterValue(std::string title, std::string ask){
     }
     std::cout << " *"<< std::endl;
     
-    std::cout << "\t" << ask << ": "; // for user input
+    std::cout << ask << ": "; // for user input
 }
 
 
@@ -384,6 +393,53 @@ void printDepartmentStatus(std::vector <Department> deps, std::vector <StatusDep
 }
 
 
+void printDashboard_Emp(std::string name, int num_vac, int num_abs, int vac_left)
+{
+    std::cout << name << "\t" << num_vac << "\t" << num_abs << "\t" << vac_left << std::endl;
+}
+void printDashboard_Header(Date date)
+{
+    clearScreenANSI();
+    std::cout << "* " << "Monthly Dashboard " << nomeMes(date.month) << " " << date.year << " *" << std::endl;
+    std::cout << "-- --" << std::endl;
+}
+
+
+
+// Menu CRUD Notes / Courses
+void crud_printCrudMenu(std::string emp_name, std::string crud_item)
+{
+    clearScreenANSI();
+
+    // Header
+    std::cout << "* " << crud_item << ": " << emp_name << std::endl;
+    std::cout << "* --------- *"<< std::endl;
+    std::cout << std::endl;
+
+    // Options
+    std::cout << "(1) Add " << crud_item << std::endl;
+    std::cout << "(2) Edit " << crud_item << std::endl;
+    std::cout << "(3) Remove " << crud_item << std::endl;
+    std::cout << "(4) List " << crud_item << std::endl;
+
+    // Exit
+    std::cout << std::endl;
+    std::cout << "(0) Back" << std::endl;
+    std::cout << "> "; // for user input
+}
+
+void crud_print_list_Header(std::string crud_item, std::string emp_name)
+{
+    clearScreenANSI();
+    // Header
+    std::cout << "* List " << crud_item << ": " << emp_name << std::endl;
+    std::cout << "* --------- *"<< std::endl;
+    std::cout << std::endl;
+}
+void crud_print_list_Item(std::string item, std::string date)
+{
+    std::cout << "> " << item << " | " << date << std::endl;
+}
 
 
 // General Use

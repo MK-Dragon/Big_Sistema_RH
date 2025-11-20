@@ -19,7 +19,6 @@ struct Employee {
 
     Department departement;
 
-    // Later:
-    std::vector <Note> notes;
     std::vector <Course> courses;
+    std::vector <Note> notes;
 };

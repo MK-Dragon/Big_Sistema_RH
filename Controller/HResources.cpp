@@ -394,3 +394,35 @@ std::vector <StatusDepartment> HResources::run_status_for_department()
 }
 
 
+
+int HResources::count_VacAbs_year(std::vector<Date> dates, int year)
+{
+    int num_days = 0;
+    for (auto &&d : dates)
+    {
+        if (d.year == year)
+        {
+            num_days++;
+        }
+    }
+    return num_days;
+}
+
+
+// Couse Add
+void HResources::add_course(Employee &emp, Course course)
+{
+    emp.courses.push_back(course);
+}
+// Course Remove
+/*void HResources::remove_course(Employee &emp, Course course_to_remove)
+{
+    auto it = std::remove(emp.courses.begin(), emp.courses.end(), course_to_remove);
+    emp.courses.erase(it, emp.courses.end());
+}*/
+// Course Edit
+void HResources::edit_course(Course &course, std::string name, std::string date) // TODO: Test
+{
+    course.nome_curso = name;
+    course.completion_date = date;
+}

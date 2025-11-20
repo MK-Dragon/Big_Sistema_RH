@@ -20,18 +20,23 @@ HResources hr;
 
 int get_emp_id(){
     // Get employee ID
-    int imp_id;
+    int emp_id;
     while (true) {
-        if (!(std::cin >> imp_id)) {
+        if (!(std::cin >> emp_id)) {
             std::cin.clear();
             std::cin.ignore(10000, '\n');
             std::cout << "Invalid input. Please enter a number between 0 and " << hr.next_id -1 << "\n";
             continue;
         }
-        if (imp_id >= 0 && imp_id < hr.next_id) break;
+        if (emp_id == -1)
+        {
+            return emp_id; // exit
+        }
+        
+        if (emp_id >= 0 && emp_id < hr.next_id) break;
         std::cout << "Invalid input. Please enter a number between 0 and " << hr.next_id -1 << "\n";
     }
-    return imp_id;
+    return emp_id;
 }
 
 Date get_weed_day(){
@@ -53,7 +58,6 @@ Date get_weed_day(){
         if (new_day.day == 0 || new_day.month == 0 || new_day.year == 0)
         {
             std::cout << "Invalid day. Please enter a number equal or bigger then 1.\n";
-            //showPressAnyKey();
             continue;
         }
         // check weekend
@@ -61,7 +65,33 @@ Date get_weed_day(){
         if (day_week == 0 || day_week == 6)
         {
             std::cout << "Invalid day. Please enter a Week Day.\n";
-            //showPressAnyKey();
+            continue;
+        }
+        break;
+    }
+    //std::cout << "\n\tDebug return get_week:" << std::to_string(new_day.day) << "-" << std::to_string(new_day.month) << "-" << std::to_string(new_day.year) << "\n";
+    return new_day;
+}
+
+Date get_date_no_check(){
+    Date new_day;
+    //std::cout << "\n\tDebug @ new day:" << std::to_string(new_day.day) << "-" << std::to_string(new_day.month) << "-" << std::to_string(new_day.year) << "\n";
+
+    while (true)
+    {
+        std::string new_day_string;
+        std::getline(std::cin >> std::ws, new_day_string);
+        std::cin.clear();
+
+        //std::cout << "Debug String: " << new_day_string << "\n";        
+
+        new_day = parse_date(new_day_string);
+        //std::cout << "\n\tDebug at parse:" << std::to_string(new_day.day) << "-" << std::to_string(new_day.month) << "-" << std::to_string(new_day.year) << "\n";
+
+        // If date is Zero / Error
+        if (new_day.day == 0 || new_day.month == 0 || new_day.year == 0)
+        {
+            std::cout << "Invalid day. Please enter a number equal or bigger then 1.\n";
             continue;
         }
         break;
@@ -86,6 +116,34 @@ bool get_yes_no(){
     return false; // just in case...
 }
 
+
+int get_menu_item(int MAX){
+    int num;
+    while (true) {
+        if (!(std::cin >> num)) {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "Invalid input. Please enter a number between 1 and " << MAX << "\n";
+            continue;
+        }
+        if (num == -1)
+        {
+            return num; // exit
+        }
+        
+        if (num >= 0 && num < hr.next_id) break;
+        std::cout << "Invalid input. Please enter a number between 1 and " << MAX << "\n";
+    }
+    return num;
+}
+
+std::string get_text()
+{
+    std::string txt;
+    std::getline(std::cin >> std::ws, txt);
+    std::cin.clear();
+    return txt;
+}
 
 
 int choose_employee_name_OR_id(std::vector <Employee> &emps)
@@ -195,6 +253,119 @@ Department choose_department_name_OR_id()
     }
     return dep;
 }
+
+
+
+
+void menu_courses_notes(int mode) // 0 Couses / 1 Notes
+{
+    int menu = 0;
+    Employee* emp;
+    std::string crud_item;
+    if (mode == 0)
+    {
+        crud_item = "Courses";
+    }
+    else if (mode == 1)
+    {
+        crud_item = "Notes";
+    }
+
+    // Get Emp
+    printChooseEmployee("Chose Employee (name or id)", hr.get_list_employees());
+
+    std::vector <Employee> emps = hr.get_list_employees();
+    int id_emp = choose_employee_name_OR_id(emps);
+    emp = &hr.get_employee(id_emp);
+
+    while (menu != -1) // -1 => Exit
+    {
+        switch (menu)
+        {
+        case 0: // CRUD Menu
+        {
+            // Print CRUD Menu
+            crud_printCrudMenu(emp->name, crud_item);
+            // Get menu Item
+            menu = get_menu_item(4);
+            // Exit if 0
+            if (menu == 0) 
+            { menu = -1; }
+            
+        }
+            break;
+
+        case 1: // add
+        {
+            //pirnt Header
+            printEnterValue("Add " + crud_item, "");
+
+            // get data:
+            printEnterValue("Enter " + crud_item, "");
+            std::string txt = get_text();
+            printEnterValue("Enter Date ", "(dd-mm-yyyy)");
+            Date date = get_date_no_check();
+
+            // add
+            if (mode == 0) // Courser
+            {
+                Course course = {txt, parse_to_string(date)};
+                hr.add_course(*emp, course);
+            }
+            else if (mode == 1) // Notes
+            {
+                // WIP
+            }
+            
+        }
+            menu = 0;break;
+
+        case 2: // Edit
+        {
+            //
+        }
+            menu = 0;break;
+        
+            case 3: // Remove
+        {
+            //
+        }
+            menu = 0;break;
+
+            case 4: // List
+        {
+            crud_print_list_Header(crud_item, emp->name);
+            
+            if (mode == 0)
+            {
+                for (auto &&x : emp->courses)
+                {
+                    crud_print_list_Item(x.nome_curso, x.completion_date);
+                }
+            }
+            else if (mode == 1)
+            {
+                for (auto &&x : emp->notes)
+                {
+                    crud_print_list_Item(x.text, x.date);
+                }
+            }
+            showPressAnyKey();
+        }
+            menu = 0;break;
+
+        case -1: // Back
+        {
+            menu = 0;
+        }
+            break;
+        default:
+            break;
+        }
+        
+    }
+}
+
 
 
 
@@ -784,6 +955,42 @@ int main()
                 );
             }
                 showPressAnyKey();
+                menu = 0;
+                break;
+
+            case 13: // Monthly Dashboard
+            {
+                Date to_day = get_current_date();
+                printDashboard_Header(to_day);
+                for (auto &&emp : hr.get_list_employees())
+                {
+                    int num_vac_days = hr.count_VacAbs_year(emp.vacations, to_day.year);
+                    int num_vac_left = hr.NUM_VAC_DAYS - num_vac_days;
+                    printDashboard_Emp(
+                        emp.name,
+                        num_vac_days,
+                        hr.count_VacAbs_year(emp.absences, to_day.year),
+                        num_vac_left
+                    );
+                }
+            }
+                showPressAnyKey();
+                menu = 0;
+                break;
+
+            case 14: // CRUD - Courses
+            {
+                menu_courses_notes(0);
+            }
+                //showPressAnyKey();
+                menu = 0;
+                break;
+
+            case 15: // CRUD - Notes
+            {
+                menu_courses_notes(1);
+            }
+                //showPressAnyKey();
                 menu = 0;
                 break;
 

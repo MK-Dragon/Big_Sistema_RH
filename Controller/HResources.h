@@ -18,6 +18,7 @@ struct HResources
     std::vector <Department> department_list;
     std::vector <StatusDepartment> status_departments;
     int max_abs = 0;
+    int NUM_VAC_DAYS = 22;
 
 
     // Helper Functions:
@@ -62,5 +63,12 @@ struct HResources
 
     // Status
     std::vector <StatusDepartment> run_status_for_department();
+    int count_VacAbs_year(std::vector<Date> dates, int year);
+
+
+    // Notes
+    void add_course(Employee &emp, Course course);
+    void remove_course(Employee &emp, Course course);
+    void edit_course(Course &course, std::string name, std::string date);
 };
 
