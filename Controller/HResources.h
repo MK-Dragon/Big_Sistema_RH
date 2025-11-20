@@ -27,6 +27,7 @@ struct HResources
     int checkDateExists(Date day, Employee &emp);
     bool checkDepartementNameExists(std::string dep_name);
     bool checkDepartementIdExists(int dep_id);
+    bool checkVacationOnDepartment(Date day, int id_department);
 
     // List Employees:
     std::vector <Employee> get_list_employees();

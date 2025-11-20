@@ -112,6 +112,23 @@ bool HResources::checkDepartementIdExists(int dep_id)
 }
 
 
+bool HResources::checkVacationOnDepartment(Date day, int id_department)
+{
+    for (auto &&emp : get_employes_from_department(id_department))
+    {
+        for (auto &&d : emp.vacations)
+        {
+            if (d.day == day.day && d.month == day.month && d.year == day.year)
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+
+
 // List Employees
 std::vector <Employee> HResources::get_list_employees()
 {

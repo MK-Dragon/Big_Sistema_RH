@@ -247,13 +247,14 @@ int main()
     }
     else // Not File found -> Load Demo
     {
-        std::vector<Date> vac = {{31,10,2025}, {30,10,2025}, {17,11,2025}};
+        std::vector<Date> vac_a = {{31,10,2025}, {30,10,2025}, {17,11,2025}};
+        std::vector<Date> vac_b = {{10,11,2025}, {25,11,2025}, {26,11,2025}};
         std::vector<Date> abse = {{7,10,2025}, {8,10,2025}, {18,11,2025}, {19,11,2025}};
 
-        hr.add_loaded_employee(1, "Zé Manel", vac, abse, 1);
-        hr.add_loaded_employee(2, "Ana Pimbão", vac, abse, 2);
-        hr.add_loaded_employee(3, "Lili Canelas", vac, abse, 45); // Não deve ter dep
-        hr.add_loaded_employee(4, "Fernado Fisgado", vac, abse, 1);
+        hr.add_loaded_employee(1, "Zé Manel", vac_a, abse, 1);
+        hr.add_loaded_employee(2, "Ana Pimbão", vac_a, abse, 2);
+        hr.add_loaded_employee(3, "Lili Canelas", vac_b, abse, 45); // Não deve ter dep
+        hr.add_loaded_employee(4, "Fernado Fisgado", vac_b, abse, 1);
     }
 
 
@@ -350,6 +351,11 @@ int main()
                     switch (hr.checkDateExists(new_day, *emp))
                     {
                     case 0: // Does not Exist -> carry on
+                        if (hr.checkVacationOnDepartment(new_day, emp->departement.id))
+                        {
+                            showError("Error Marking Vacation", "Someone in the department has vacations that Day.");
+                            break;
+                        }
                         hr.add_vacation(*emp, new_day);
                         break;
 
