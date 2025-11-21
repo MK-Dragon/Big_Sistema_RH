@@ -25,22 +25,3 @@ std::string encriptar(const std::string &texto, int chave) {
 std::string desencriptar(const std::string &texto, int chave) {
     return encriptar(texto, 26 - (chave % 26)); // desloca no sentido inverso
 }
- 
-/*int main() {
-    std::string mensagem;
-    int chave;
- 
-    std::cout << "Digite a mensagem: ";
-    std::getline(std::cin, mensagem);
- 
-    std::cout << "Digite a chave (número): ";
-    std::cin >> chave;
- 
-    std::string cifrada = encriptar(mensagem, chave);
-    std::string decifrada = desencriptar(cifrada, chave);
- 
-    std::cout << "\nMensagem cifrada: " << cifrada << "\n";
-    std::cout << "Mensagem decifrada: " << decifrada << "\n";
- 
-    return 0;
-}*/

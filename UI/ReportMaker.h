@@ -32,7 +32,7 @@ std::string report_emp(Employee emp, std::vector<Date> vac_year, std::vector<Dat
 {
     std::string line = "Report: " + emp.name + " - " + emp.departement.name_department + "\n";
 
-    line += "Vaction Days [" + std::to_string(vac_year.size()) + "/" + std::to_string(max_vac) + "]\n";
+    line += "Vaction Days [" + std::to_string(vac_year.size()) + "/" + std::to_string(max_vac) + "] - " + std::to_string(max_vac-vac_year.size()) +" Days Left\n";
     for (auto &&d : vac_year)
     {
         line += "\t" + __parse_to_string(d) + "\n";
@@ -49,7 +49,7 @@ std::string report_emp(Employee emp, std::vector<Date> vac_year, std::vector<Dat
 // Print Department Status
 std::string report_dep(Department dep, std::vector<Date> vac_year, std::vector<Date>abs_year, int total_days_vac)
 {
-    std::string line = "> " + dep.name_department + ": " + std::to_string(total_days_vac) + " days of vactions on total\n";
+    std::string line = "Report: " + dep.name_department + ": " + std::to_string(total_days_vac) + " days of vactions on total\n";
 
     line += "Vaction Days [" + std::to_string(vac_year.size()) + "]\n";
     for (auto &&d : vac_year)
