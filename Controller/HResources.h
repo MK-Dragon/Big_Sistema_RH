@@ -66,6 +66,7 @@ struct HResources
     // Status
     std::vector <StatusDepartment> run_status_for_department();
     int count_VacAbs_year(std::vector<Date> dates, int year);
+    std::vector<Date> get_VacAbs_year(std::vector<Date> dates, int year);
 
 
     // Courses

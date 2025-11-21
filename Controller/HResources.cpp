@@ -406,6 +406,19 @@ int HResources::count_VacAbs_year(std::vector<Date> dates, int year)
     }
     return num_days;
 }
+// get days in year
+std::vector<Date> HResources::get_VacAbs_year(std::vector<Date> dates, int year)
+{
+    std::vector<Date> days;
+    for (auto &&d : dates)
+    {
+        if (d.year == year)
+        {
+            days.push_back(d);
+        }
+    }
+    return days;
+}
 
 
 

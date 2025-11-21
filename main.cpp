@@ -10,9 +10,13 @@
 
 #include "Controller/HResources.h"
 #include "Controller/HResources.cpp"
+
 #include "Model/Employee.h"
 #include "Model/Dates.h"
+
 #include "UI/UI.h"
+#include "UI/ReportMaker.h"
+
 #include "Utils/CSV_Manager.h"
 #include "Utils/TypeChecking.h"
 
@@ -43,18 +47,14 @@ int get_emp_id(){
 
 Date get_weed_day(){
     Date new_day;
-    //std::cout << "\n\tDebug @ new day:" << std::to_string(new_day.day) << "-" << std::to_string(new_day.month) << "-" << std::to_string(new_day.year) << "\n";
 
     while (true)
     {
         std::string new_day_string;
         std::getline(std::cin >> std::ws, new_day_string);
-        std::cin.clear();
-
-        //std::cout << "Debug String: " << new_day_string << "\n";        
+        std::cin.clear();      
 
         new_day = parse_date(new_day_string);
-        //std::cout << "\n\tDebug at parse:" << std::to_string(new_day.day) << "-" << std::to_string(new_day.month) << "-" << std::to_string(new_day.year) << "\n";
 
         // If date is Zero / Error
         if (new_day.day == 0 || new_day.month == 0 || new_day.year == 0)
@@ -71,13 +71,11 @@ Date get_weed_day(){
         }
         break;
     }
-    //std::cout << "\n\tDebug return get_week:" << std::to_string(new_day.day) << "-" << std::to_string(new_day.month) << "-" << std::to_string(new_day.year) << "\n";
     return new_day;
 }
 
 Date get_date_no_check(){
     Date new_day;
-    //std::cout << "\n\tDebug @ new day:" << std::to_string(new_day.day) << "-" << std::to_string(new_day.month) << "-" << std::to_string(new_day.year) << "\n";
 
     while (true)
     {
@@ -85,10 +83,7 @@ Date get_date_no_check(){
         std::getline(std::cin >> std::ws, new_day_string);
         std::cin.clear();
 
-        //std::cout << "Debug String: " << new_day_string << "\n";        
-
         new_day = parse_date(new_day_string);
-        //std::cout << "\n\tDebug at parse:" << std::to_string(new_day.day) << "-" << std::to_string(new_day.month) << "-" << std::to_string(new_day.year) << "\n";
 
         // If date is Zero / Error
         if (new_day.day == 0 || new_day.month == 0 || new_day.year == 0)
@@ -98,7 +93,6 @@ Date get_date_no_check(){
         }
         break;
     }
-    //std::cout << "\n\tDebug return get_week:" << std::to_string(new_day.day) << "-" << std::to_string(new_day.month) << "-" << std::to_string(new_day.year) << "\n";
     return new_day;
 }
 
@@ -133,8 +127,22 @@ int get_menu_item(int MAX){
             return num; // exit
         }
         
-        if (num >= 0 && num < hr.next_id) break;
+        if (num >= 0 && num < MAX) break;
         std::cout << "Invalid input. Please enter a number between 1 and " << MAX << "\n";
+    }
+    return num;
+}
+
+int get_year(){
+    int num;
+    while (true) {
+        if (!(std::cin >> num)) {
+            std::cin.clear();
+            std::cin.ignore(10000, '\n');
+            std::cout << "Invalid input. Please enter a number\n";
+            continue;
+        }
+        break;
     }
     return num;
 }
@@ -255,7 +263,6 @@ Department choose_department_name_OR_id()
     }
     return dep;
 }
-
 
 
 
@@ -500,15 +507,58 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
 }
 
 
-void generate_report_emp(Employee emp, int year)
+void generate_report_emp(std::string report_folder, Employee &emp, int year)
 {
+    std::vector<std::string> buffer;
+
     // get vac & abs for year
-    // get buffer line
+    std::vector<Date> vac_days = hr.get_VacAbs_year(emp.vacations, year); 
+    std::vector<Date> abs_days = hr.get_VacAbs_year(emp.absences, year);
+
+    // get buffer lines
+    std::string line = report_header("Full Report for: " + emp.name + " " + std::to_string(year)) + "\n";
+    buffer.push_back(report_emp(emp, vac_days, abs_days, hr.NUM_VAC_DAYS));
+
     // save to file (report_emp{id}.txt)
+    std::string f = report_folder + "Report_emp" + std::to_string(emp.id) + ".txt";
+    write_report(f, buffer);
 }
-void generate_report_dep(Department dep, int year)
+void generate_report_dep(std::string report_folder, Department dep, int year)
 {
-    //
+    std::vector<std::string> buffer;
+    std::string f = report_folder + "Report_dep" + std::to_string(dep.id) + ".txt";
+    std::string line;
+
+    std::vector<Date> total_day_vac;
+    std::vector<Date> total_day_abs;
+    int total_num_days_vac = 0;
+
+    std::vector <Employee> emps = hr.get_employes_from_department(dep.id);
+    for (auto &&e : emps)
+    {
+        // get vac & abs for year for each dep
+        std::vector<Date> day_vac =  hr.get_VacAbs_year(e.vacations, year);
+        std::vector<Date> day_abs =  hr.get_VacAbs_year(e.absences, year);
+
+        total_num_days_vac += day_vac.size();
+
+        // Merge dates for Total
+        total_day_vac = merge_date_lists(total_day_vac, day_vac);
+        total_day_abs = merge_date_lists(total_day_abs, day_abs);
+    }
+
+    line = report_dep(dep, total_day_vac, total_day_abs, total_num_days_vac);
+    buffer.push_back(line);
+    
+
+    // std::vector<Employee> get_employes_from_department(int id_department);
+    
+    // std::vector<Date> get_VacAbs_year(std::vector<Date> dates, int year)
+
+    // get buffer lines
+    // save to file (report_emp{id}.txt)
+    
+    write_report(f, buffer);
 }
 
 
@@ -528,6 +578,7 @@ int main()
     int menu = 0; // Main menu
     std::string FILE_NAME = "DB/db.csv";
     std::string FILE_NAME_DEP = "DB/db_dep.csv";
+    std::string FOLDER_REPORTS = "Reports/";
 
     // Load Department CSV
     if (Check_File_Exists(FILE_NAME_DEP) == 1)
@@ -1137,14 +1188,32 @@ int main()
 
             case 16: // Export Employee's Report
             {
+                // get emp
+                std::vector<Employee> emps = hr.get_list_employees();
+                printChooseEmployee("Generate Repor for Employee:", emps);
+                int id = choose_employee_name_OR_id(emps);
+                Employee emp = hr.get_employee(id);
 
+                // get Year for report
+                printEnterValue("Report for year:", "Enter Year");
+                int year = get_year();
+
+                generate_report_emp(FOLDER_REPORTS, emp, 2025);
             }
                 menu = 0;
                 break;
 
             case 17: // Export Department's Report
             {
-                
+                // get dep
+                printChooseDepartment_Name_ID(hr.get_list_of_departments());
+                Department dep = choose_department_name_OR_id();
+
+                // get Year for report
+                printEnterValue("Report for year:", "Enter Year");
+                int year = get_year();
+
+                generate_report_dep(FOLDER_REPORTS, dep, year);
             }
                 menu = 0;
                 break;

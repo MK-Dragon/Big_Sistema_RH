@@ -1,22 +1,17 @@
+// UI/ReportMaker.h
+
 #pragma once
 #include "../Model/Employee.h"
 #include "../Model/Dates.h"
-#include "../Utils/Calendar.h"
 
 #include <string>
 #include <iostream>
-#include <conio.h> // Header for _getch()
 #include <vector>
-#include <unordered_map>
 
-#include <iomanip>
-#include <algorithm> // Required for std::find_if
-#include <optional> // Requires C++17, but is the cleanest way to return a marker
 
-#define ANSI_COLOR_RED     "\x1b[31m"
-#define ANSI_COLOR_YELLOW "\x1b[33m"
-
-#define ANSI_COLOR_RESET   "\x1b[0m"
+std::string __parse_to_string(Date d){
+    return std::to_string(d.day) + "-" + std::to_string(d.month) + "-" + std::to_string(d.year);
+}
 
 std::string report_header(std::string title)
 {
@@ -35,36 +30,36 @@ std::string report_header(std::string title)
 // Print Emp
 std::string report_emp(Employee emp, std::vector<Date> vac_year, std::vector<Date>abs_year, int max_vac)
 {
-    std::string line = "> " + emp.name + " | " + emp.departement.name_department + "\n";
+    std::string line = "Report: " + emp.name + " - " + emp.departement.name_department + "\n";
 
-    line += "Vaction Days [" + std::to_string(vac_year.size()) + "/" + std::to_string(max_vac) + "]";
+    line += "Vaction Days [" + std::to_string(vac_year.size()) + "/" + std::to_string(max_vac) + "]\n";
     for (auto &&d : vac_year)
     {
-        line += "\t" + parse_to_string(d) + "\n";
+        line += "\t" + __parse_to_string(d) + "\n";
     }
-    line += "Absence Days [" + std::to_string(vac_year.size()) + "]";
+    line += "Absence Days [" + std::to_string(vac_year.size()) + "]\n";
     for (auto &&d : vac_year)
     {
-        line += "\t" + parse_to_string(d) + "\n";
+        line += "\t" + __parse_to_string(d) + "\n";
     }
     
     return line;
 }
 
 // Print Department Status
-std::string report_dep(Department dep, std::vector<Date> vac_year, std::vector<Date>abs_year, int max_vac)
+std::string report_dep(Department dep, std::vector<Date> vac_year, std::vector<Date>abs_year, int total_days_vac)
 {
-    std::string line = "> " + dep.name_department + ":\n";
+    std::string line = "> " + dep.name_department + ": " + std::to_string(total_days_vac) + " days of vactions on total\n";
 
-    line += "Vaction Days [" + std::to_string(vac_year.size()) + "/" + std::to_string(max_vac) + "]";
+    line += "Vaction Days [" + std::to_string(vac_year.size()) + "]\n";
     for (auto &&d : vac_year)
     {
-        line += "\t" + parse_to_string(d) + "\n";
+        line += "\t" + __parse_to_string(d) + "\n";
     }
-    line += "Absence Days [" + std::to_string(vac_year.size()) + "]";
+    line += "Absence Days [" + std::to_string(vac_year.size()) + "]\n";
     for (auto &&d : vac_year)
     {
-        line += "\t" + parse_to_string(d) + "\n";
+        line += "\t" + __parse_to_string(d) + "\n";
     }
     
     return line;

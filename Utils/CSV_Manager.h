@@ -468,4 +468,5 @@ bool write_report(const std::string& filename, const std::vector<std::string>& b
     {
         ofs << line << std::endl;
     }
+    return true;
 }
