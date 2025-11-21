@@ -129,7 +129,7 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
     }
 
     // Write the header row
-    ofs << "Id,Name,Vacations,Absences,Departement" << std::endl;
+    ofs << "Id,Name,Vacations,Absences,Departement,Courses,Notes" << std::endl;
 
     // Write the data rows
     
@@ -147,7 +147,6 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
             if (!first)
             {
                 vacations += "+";
-                
             }
             vacations += parse_to_string(day);
             first = false;
@@ -159,7 +158,6 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
         if (emp.absences.size() == 0)
         {
             absences = "0-0-0";
-
         }
         for (const auto& day : emp.absences)
         {
@@ -171,9 +169,43 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
             absences += parse_to_string(day);
             first = false;
         }
+
+        // Course -> String
+        std::string couses;
+        first = true;
+        if (emp.courses.size() == 0)
+        {couses = "null";}
+        for (const auto& x : emp.courses)
+        {
+            if (!first)
+            {
+                couses += "+";
+                
+            }
+            couses += x.nome_curso + "|" + x.completion_date;
+            first = false;
+        }
+        // Notes -> String
+        std::string notes;
+        first = true;
+        if (emp.notes.size() == 0)
+        {notes = "null";}
+        for (const auto& x : emp.notes)
+        {
+            if (!first)
+            {
+                notes += "+";
+                
+            }
+            notes += x.text + "|" + x.date;
+            first = false;
+        }
         
         // Save line to File!
-        std::string line_buffer = std::to_string(emp.id) + ',' + emp.name + ',' + vacations + "," + absences + "," + std::to_string(emp.departement.id);
+        std::string line_buffer = std::to_string(emp.id) + ',' + emp.name + ','
+            + vacations + "," + absences + ","
+            + std::to_string(emp.departement.id) + "," + couses + "," + notes;
+        
         ofs <<  encriptar(line_buffer, key) << std::endl;
     }
 
@@ -192,8 +224,10 @@ std::vector<Employee> read_csv(const std::string& filename, std::vector<Departme
     const int seg_vac = 2;
     const int seg_abs = 3;
     const int seg_dep = 4;
+    const int seg_cou = 5;
+    const int seg_not = 6;
 
-    const int num_seg = 5; // total num of segments!
+    const int num_seg = 7; // total num of segments!
 
     std::vector<Employee> list_employees;
     std::ifstream ifs(filename);
@@ -227,7 +261,7 @@ std::vector<Employee> read_csv(const std::string& filename, std::vector<Departme
             segments.push_back(segment);
         }
 
-        // We expect exactly 3 fields
+        // We expect exactly x number of fields
         if (segments.size() == num_seg) {
             Employee emp;
             
@@ -246,6 +280,9 @@ std::vector<Employee> read_csv(const std::string& filename, std::vector<Departme
                 // splite ;
                 std::vector<std::string> vac_strings = split_string(segments[seg_vac], '+');
                 std::vector<std::string> abs_strings = split_string(segments[seg_abs], '+');
+
+                std::vector<std::string> cou_strings = split_string(segments[seg_cou], '+');
+                std::vector<std::string> not_strings = split_string(segments[seg_not], '+');
                 // for date in list -> parse to Date
                 for (const auto& date_string : vac_strings)
                 {
@@ -261,6 +298,36 @@ std::vector<Employee> read_csv(const std::string& filename, std::vector<Departme
                     if (date_date.day != 0 && date_date.month != 0 && date_date.year != 0)
                     {
                         emp.absences.push_back(date_date);
+                    }
+                }
+                // Parse Courses and Notes
+
+                for (const auto& date_string : cou_strings)
+                {
+                    // split text and date
+                    std::vector<std::string> mini_strings = split_string(date_string, '|');
+
+                    if (mini_strings[0] == "null" || mini_strings[1] == "null")
+                    { continue; }
+
+                    Date date_date = parse_date(mini_strings[1]);
+                    if (date_date.day != 0 && date_date.month != 0 && date_date.year != 0)
+                    {
+                        emp.courses.push_back({mini_strings[0], mini_strings[1]});
+                    }
+                }
+                for (const auto& date_string : not_strings)
+                {
+                    // split text and date
+                    std::vector<std::string> mini_strings = split_string(date_string, '|');
+
+                    if (mini_strings[0] == "null" || mini_strings[1] == "null")
+                    { continue; }
+
+                    Date date_date = parse_date(mini_strings[1]);
+                    if (date_date.day != 0 && date_date.month != 0 && date_date.year != 0)
+                    {
+                        emp.notes.push_back({mini_strings[0], mini_strings[1]});
                     }
                 }
                 list_employees.push_back(emp);

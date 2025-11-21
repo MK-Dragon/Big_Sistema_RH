@@ -165,14 +165,16 @@ void HResources::add_employee(std:: string name)
 }
 
 // Add Loaded Employee
-void HResources::add_loaded_employee(int id, std:: string name, std::vector<Date> vacations, std::vector<Date> absences, int dep_id)
+void HResources::add_loaded_employee(int id, std:: string name, std::vector<Date> vacations, std::vector<Date> absences, int dep_id, std::vector<Course> courses, std::vector<Note> notes)
 {
     Employee new_emp {
         id,
         name,
         vacations,
         absences,
-        this->get_department_from_id(dep_id)
+        this->get_department_from_id(dep_id),
+        courses,
+        notes
     };
     list_of_employees.push_back(new_emp);
     if (id >= next_id)

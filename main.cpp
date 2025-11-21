@@ -491,10 +491,8 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
             menu = 0;break;
 
         case -1: // Back
-        {
-            menu = 0;
-        }
-            break;
+            menu = 0;break;
+            
         default:
             break;
         }
@@ -549,7 +547,7 @@ int main()
         std:: cout << "main -> Num Emps: " << loaded_emp.size() << "\n";
 
         for (const auto& emp : loaded_emp){
-            hr.add_loaded_employee(emp.id, emp.name, emp.vacations, emp.absences, emp.departement.id);
+            hr.add_loaded_employee(emp.id, emp.name, emp.vacations, emp.absences, emp.departement.id, emp.courses, emp.notes);
         }
     }
     else // Not File found -> Load Demo
@@ -558,10 +556,10 @@ int main()
         std::vector<Date> vac_b = {{10,11,2025}, {25,11,2025}, {26,11,2025}};
         std::vector<Date> abse = {{7,10,2025}, {8,10,2025}, {18,11,2025}, {19,11,2025}};
 
-        hr.add_loaded_employee(1, "Zé Manel", vac_a, abse, 1);
-        hr.add_loaded_employee(2, "Ana Pimbão", vac_a, abse, 2);
-        hr.add_loaded_employee(3, "Lili Canelas", vac_b, abse, 45); // Não deve ter dep
-        hr.add_loaded_employee(4, "Fernado Fisgado", vac_b, abse, 1);
+        hr.add_loaded_employee(1, "Zé Manel", vac_a, abse, 1, {}, {});
+        hr.add_loaded_employee(2, "Ana Pimbão", vac_a, abse, 2, {}, {});
+        hr.add_loaded_employee(3, "Lili Canelas", vac_b, {}, 45, {}, {}); // Não deve ter dep
+        hr.add_loaded_employee(4, "Fernado Fisgado", vac_b, abse, 1, {}, {});
     }
 
 

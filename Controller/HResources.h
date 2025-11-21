@@ -6,6 +6,8 @@
 
 #include "../Model/Employee.h"
 #include "../Model/Dates.h"
+//#include "../Model/Course.h"
+//#include "../Model/Note.h"
 
 
 
@@ -36,7 +38,7 @@ struct HResources
 
     // Add Employee:
     void add_employee(std:: string name);
-    void add_loaded_employee(int id, std:: string name, std::vector<Date> vacations, std::vector<Date> absences, int dep_id);
+    void add_loaded_employee(int id, std:: string name, std::vector<Date> vacations, std::vector<Date> absences, int dep_id, std::vector<Course> courses, std::vector<Note> notes);
 
     // Get Employee:
     Employee& get_employee(int emp_id);
