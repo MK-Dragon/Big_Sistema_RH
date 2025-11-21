@@ -159,7 +159,6 @@ std::string get_text()
 int choose_employee_name_OR_id(std::vector <Employee> &emps)
 {
     // Check No Employees on DB
-    //std::vector <Employee> emps = hr.get_list_employees();
     Employee emp;
     if (emps.size() == 0)
     {
@@ -549,15 +548,7 @@ void generate_report_dep(std::string report_folder, Department dep, int year)
 
     line = report_dep(dep, total_day_vac, total_day_abs, total_num_days_vac);
     buffer.push_back(line);
-    
-
-    // std::vector<Employee> get_employes_from_department(int id_department);
-    
-    // std::vector<Date> get_VacAbs_year(std::vector<Date> dates, int year)
-
-    // get buffer lines
     // save to file (report_emp{id}.txt)
-    
     write_report(f, buffer);
 }
 
@@ -633,7 +624,6 @@ int main()
         int num_days;
         Date new_day;
         std::string new_day_string;
-        
 
         // Show Menu
         printMainMenu();
@@ -657,14 +647,12 @@ int main()
                 menu = -1;
                 break;
 
-
             case 1: // List Employees
                 printListOfEmployees(hr.get_list_employees());
 
                 showPressAnyKey();
                 menu = 0;
                 break;
-           
                 
             case 2: // Add Employees
             {
@@ -681,11 +669,9 @@ int main()
                     hr.add_employee(new_emp_name);
                 }
             }
-                
                 menu = 0;
                 break;
             
-
             case 3: // Mark Vacation
             {
                 printChooseEmployee("Mark Vacation", hr.get_list_employees());
@@ -750,7 +736,6 @@ int main()
                 menu = 0;
                 break;
 
-
             case 4: // REMOVE Vacation
                 printChooseEmployee("Remove Vacation", hr.get_list_employees());
                 
@@ -758,8 +743,13 @@ int main()
                 imp_id = get_emp_id();
                 emp = &hr.get_employee(imp_id);
 
+                if(emp->vacations.size() == 0)
+                {
+                    showError("Error: No Vacation Found", "Employee has No Vacation days Marked");
+                    break;
+                }
+
                 // get number of days to add
-                
                 while (true) {
                     printEnterValue("Remove Vacation", "Number os Days");
                     if (!(std::cin >> num_days)) {
@@ -861,8 +851,12 @@ int main()
                 imp_id = get_emp_id();
                 emp = &hr.get_employee(imp_id);
 
+                if(emp->absences.size() == 0)
+                {
+                    showError("Error: No Absences Found", "Employee has No Absence days Marked");
+                }
+
                 // get number of days to add
-                
                 while (true) {
                     printEnterValue("Remove Absence", "Number os Days");
                     if (!(std::cin >> num_days)) {
@@ -983,10 +977,6 @@ int main()
                     std::vector <Date> all_vacations;
                     std::vector <Date> all_absences;
 
-                    //std::cout << "\n\nDebug:" << std::endl;
-                    //std::cout << "\tVac " << all_vacations.size() << std::endl;
-                    //std::cout << "\tAbs " << all_absences.size() << std::endl;
-
                     std::vector <Employee> emps_month = hr.get_employee_with_vac_abs(new_day);
 
                     // print Report!
@@ -1008,13 +998,6 @@ int main()
                         all_absences = merge_date_lists(all_absences, absences);
                     }
                     printMonthlyReport_Footer(new_day, total_vac, total_abs, all_vacations, all_absences);
-
-                    /*std::cout << "\n\nDebug:" << std::endl;
-                    std::cout << "\tVac " << all_vacations.size() << std::endl;
-                    std::cout << "\tAbs " << all_absences.size() << std::endl;
-
-                    std::vector <Date> all_days = merge_date_lists(all_vacations, all_absences);
-                    std::cout << "\tMissing " << all_days.size() << std::endl;*/
                 }
                 showPressAnyKey();
                 menu = 0;
@@ -1088,7 +1071,6 @@ int main()
                     printNumberDays("Number of Vacations", hr.get_vacation_days(*emp, current_date.month, current_date.year));
                     printNumberDays("Number of Absences", hr.get_absence_days(*emp, current_date.month, current_date.year));
                 }
-
                 showPressAnyKey();
                 menu = 0;
                 break;
@@ -1098,7 +1080,6 @@ int main()
                     std::string dep_name;
                     while (true)
                     {
-                        
                         printAddDepartment_Name(hr.get_list_of_departments());
 
                         std::getline(std::cin >> std::ws, dep_name);

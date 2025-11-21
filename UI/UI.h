@@ -27,6 +27,15 @@ void clearScreenANSI() {
     //std::cout << "\n\n\n" << std::endl;
 }
 
+void help_print_under_line(std::string title)
+{
+    std::cout << "* ";
+    for (int i = 0; i < title.size(); i++)
+    {
+            std::cout << "-";
+    }
+    std::cout << " *"<< std::endl;
+}
 
 
 // Main Menu
@@ -125,13 +134,7 @@ void printEnterValue(std::string title, std::string ask){
     clearScreenANSI();
 
     std::cout << "* " << ANSI_COLOR_YELLOW << title << ANSI_COLOR_RESET << " *" << std::endl;
-    
-    std::cout << "* ";
-    for (int i = 0; i < title.size(); i++)
-    {
-            std::cout << "-";
-    }
-    std::cout << " *"<< std::endl;
+    help_print_under_line(title);
     
     std::cout << ask << ": "; // for user input
 }
@@ -143,6 +146,8 @@ void printChooseEmployee(std::string title, std::vector <Employee> emp_list){
     clearScreenANSI();
 
     std::cout << "* " << title << " *" << std::endl;
+    help_print_under_line(title);
+
     printEmployees(emp_list);
     std::cout << "\tEmployee number: "; // for user input
 }
@@ -159,13 +164,7 @@ void printDays(std::string title, std::vector<Date> days){
 void printChooseDay(std::string title, std::vector<Date> vac_days, std::vector<Date> abs_days){
     clearScreenANSI();
     std::cout << "* " << title << " *" << std::endl;
-
-    std::cout << "* ";
-    for (int i = 0; i < title.size(); i++)
-    {
-            std::cout << "-";
-    }
-    std::cout << " *"<< std::endl;
+    help_print_under_line(title);
 
     if (vac_days.size() != 0) {
         printDays("Vacation Days", vac_days);
@@ -182,6 +181,8 @@ void printChooseDay(std::string title, std::vector<Date> vac_days, std::vector<D
 void printFindEmployee(int maxID){
     clearScreenANSI();
     std::cout << "* " << "Find Employee" << " *" << std::endl;
+    help_print_under_line("Find Employee");
+
     std::cout << "Insert Name or ID (ID between 1 and " << maxID << ")" << std::endl;
     std::cout << "> "; // for user input
 }
@@ -189,11 +190,14 @@ void printFindEmployee(int maxID){
 void printEmployee_Info(Employee emp){
     clearScreenANSI();
     std::cout << "* " << emp.name << " *" << std::endl;
+    help_print_under_line(emp.name);
+    
     std::cout << "Department: " << emp.departement.name_department << std::endl;
     std::cout << "Formação: " << emp.name << std::endl;
     std::cout << "Notas: " << emp.name << std::endl;
     
-    std::cout << "-- --" << std::endl;
+    //std::cout << "-- --" << std::endl;
+    help_print_under_line(emp.name);
 }
 
 void printNumberDays(std::string title, std::vector<Date> days){
@@ -282,8 +286,8 @@ void printCalendarMarked(
 // Print Monthly Report
 void printMonthlyReport_Header(Date date){
     std::cout << "* " << "Monthly Report " << nomeMes(date.month) << " " << date.year << " *" << std::endl;
-    std::cout << "-- --" << std::endl;
-    std::cout << "-- --" << std::endl;
+    help_print_under_line( "Monthly Report " + nomeMes(date.month) + " " + std::to_string(date.year));
+    help_print_under_line( "Monthly Report " + nomeMes(date.month) + " " + std::to_string(date.year));
 }
 void printMonthlyReport_Emp(Date date, std::string emp_name, std::vector <Date> vacations, std::vector <Date> absences){
     printCalendarMarked(
@@ -302,8 +306,8 @@ void printMonthlyReport_Emp(Date date, std::string emp_name, std::vector <Date> 
 void printMonthlyReport_Footer(Date date, int num_vac, int num_abs, std::vector <Date> vacations, std::vector <Date> absences){
     std::cout << std::endl;
     std::cout << std::endl;
-    std::cout << "-- --" << std::endl;
-    std::cout << "-- --" << std::endl;
+    help_print_under_line("Totals for " + nomeMes(date.month) + " " + std::to_string(date.year));
+    help_print_under_line("Totals for " + nomeMes(date.month) + " " + std::to_string(date.year));
 
     std::cout << "* " << "Totals for " << nomeMes(date.month) << " " << date.year << " *" << std::endl;
     std::cout << "Number of Vacation days: " << num_vac << std::endl;
@@ -395,7 +399,8 @@ void printDashboard_Header(Date date)
 {
     clearScreenANSI();
     std::cout << "* " << "Monthly Dashboard " << nomeMes(date.month) << " " << date.year << " *" << std::endl;
-    std::cout << "-- --" << std::endl;
+
+    help_print_under_line("Monthly Dashboard " + nomeMes(date.month) + " " + std::to_string(date.year));
 }
 
 
@@ -406,8 +411,8 @@ void crud_printCrudMenu(std::string emp_name, std::string crud_item)
     clearScreenANSI();
 
     // Header
-    std::cout << "* " << crud_item << ": " << emp_name << std::endl;
-    std::cout << "* --------- *"<< std::endl;
+    std::cout << "* " << crud_item << ": " << emp_name << " *" << std::endl;
+    help_print_under_line(crud_item + ": " + emp_name);
     std::cout << std::endl;
 
     // Options
@@ -426,8 +431,8 @@ void crud_print_list_Header(std::string crud_item, std::string emp_name)
 {
     clearScreenANSI();
     // Header
-    std::cout << "* List " << crud_item << ": " << emp_name << std::endl;
-    std::cout << "* --------- *"<< std::endl;
+    std::cout << "* " << "List " << crud_item << ": " << emp_name << " *" << std::endl;
+    help_print_under_line("List " + crud_item + ": " + emp_name);
     std::cout << std::endl;
 }
 void crud_print_list_Item(std::string item, std::string date)
