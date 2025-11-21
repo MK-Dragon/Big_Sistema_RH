@@ -415,14 +415,34 @@ void HResources::add_course(Employee &emp, Course course)
     emp.courses.push_back(course);
 }
 // Course Remove
-/*void HResources::remove_course(Employee &emp, Course course_to_remove)
+void HResources::remove_course(Employee &emp, Course course_to_remove)
 {
     auto it = std::remove(emp.courses.begin(), emp.courses.end(), course_to_remove);
     emp.courses.erase(it, emp.courses.end());
-}*/
+}
 // Course Edit
 void HResources::edit_course(Course &course, std::string name, std::string date) // TODO: Test
 {
+    std::cout << "\tDebug " << name << " | " << date << std::endl;
     course.nome_curso = name;
     course.completion_date = date;
 }
+
+
+
+// Notes
+void HResources::add_note(Employee &emp, Note note)
+{
+    emp.notes.push_back(note);
+}
+void HResources::remove_note(Employee &emp, Note note_to_remove)
+{
+    auto it = std::remove(emp.notes.begin(), emp.notes.end(), note_to_remove);
+    emp.notes.erase(it, emp.notes.end());
+}
+void HResources::edit_note(Note &note, std::string text, std::string date)
+{
+    note.text = text;
+    note.date = date;
+}
+

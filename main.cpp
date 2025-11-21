@@ -2,6 +2,8 @@
 
 #include <iostream>
 #include <string>
+#include <unordered_map>
+#include <utility>
 
 #include <locale>
 #include <windows.h>
@@ -314,7 +316,8 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
             }
             else if (mode == 1) // Notes
             {
-                // WIP
+                Note note = {txt, parse_to_string(date)};
+                hr.add_note(*emp, note);
             }
             
         }
@@ -322,7 +325,76 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
 
         case 2: // Edit
         {
-            //
+            using new_data = std::unordered_map<int, std::pair<std::string, std::string>>;
+            new_data map;
+
+            crud_print_list_Header("Edit " + crud_item + " from: ", emp->name);
+            
+            // List Options:
+            int i = 0;
+            if (mode == 0) // Courser
+            {
+                if (emp->courses.size() == 0)
+                {
+                    showError("Error: No Courses Found", "Please Add one first.");
+                    break;
+                }
+                for (auto &&x : emp->courses)
+                {
+                    i++;
+                    crud_print_list_Item_Index(i, x.nome_curso, x.completion_date);
+                    map[i] = {x.nome_curso, x.completion_date};
+                }
+            }
+            else if (mode == 1) // Notes
+            {
+                if (emp->notes.size() == 0)
+                {
+                    showError("Error: No Notes Found", "Please Add one first.");
+                    break;
+                }
+                for (auto &&x : emp->notes)
+                {
+                    i++;
+                    crud_print_list_Item_Index(i, x.text, x.date);
+                    map[i] = {x.text, x.date};
+                }
+            }
+            // get Item to Edit
+            crud_print_ask("Choose Entry to Edit");
+            int index = get_menu_item(i);
+
+            // get data:
+            printEnterValue("Old: " + map[index].first, "New");
+            std::string txt = get_text();
+            printEnterValue("Old: " + map[index].second, "New (dd-mm-yyyy)");
+            Date date = get_date_no_check();
+
+            i = 0;
+            if (mode == 0) // Courser
+            {
+                for (auto &&x : emp->courses)
+                {
+                    i++;
+                    if (i == index)
+                    {
+                        hr.edit_course(x, txt, parse_to_string(date));
+                        std::cout << "\tDebug " << map[index].first << " | " << map[index].second << std::endl;
+                        break;
+                    }
+                }
+            }
+            else if (mode == 1) // Notes
+            {
+                for (auto &&x : emp->notes)
+                {
+                    i++;
+                    if (i == index)
+                    {
+                        hr.edit_note(x, map[index].first, map[index].second);
+                    }
+                }
+            }
         }
             menu = 0;break;
         
@@ -449,11 +521,11 @@ int main()
             if (!(std::cin >> menu)) {
                 std::cin.clear();
                 std::cin.ignore(10000, '\n');
-                std::cout << "Invalid input. Please enter a number between 0 and 8.\n";
+                std::cout << "Invalid input. Please enter a number between 0 and 17.\n";
                 continue;
             }
-            if (menu >= 0 && menu <= 20) break; // TODO: Fix this at the END!
-            std::cout << "Please enter a number between 0 and 8.\n";
+            if (menu >= 0 && menu <= 17) break; // TODO: Fix this at the END!
+            std::cout << "Please enter a number between 0 and 17.\n";
         }
 
         // Enter Menu

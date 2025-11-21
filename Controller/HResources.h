@@ -66,9 +66,13 @@ struct HResources
     int count_VacAbs_year(std::vector<Date> dates, int year);
 
 
-    // Notes
+    // Courses
     void add_course(Employee &emp, Course course);
     void remove_course(Employee &emp, Course course);
     void edit_course(Course &course, std::string name, std::string date);
+    // Notes
+    void add_note(Employee &emp, Note note);
+    void remove_note(Employee &emp, Note note);
+    void edit_note(Note &note, std::string name, std::string date);
 };
 

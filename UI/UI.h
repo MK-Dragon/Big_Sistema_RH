@@ -36,6 +36,7 @@ void printMainMenu(){
     // Header
     std::cout << "* Main Menu *" << std::endl;
     std::cout << "* --------- *"<< std::endl;
+    
     std::cout << std::endl;
 
     // Options
@@ -76,15 +77,14 @@ void printMainMenu(){
     std::cout << "(14) Courses" << std::endl;
     std::cout << "(15) Notes" << std::endl;
 
-
-    //std::cout << "(11) Employee's Monthly Calendar" << std::endl;
-    //std::cout << "(11) Employee's Monthly Calendar" << std::endl;
-
+    std::cout << std::endl;
+    std::cout << "(16) Export Employee's Report" << std::endl;
+    std::cout << "(17) Export EVERYONE's Report" << std::endl;
 
     // Exit
     std::cout << std::endl;
     std::cout << "(0) Exit" << std::endl;
-    std::cout << "\t> "; // for user input
+    std::cout << "> "; // for user input
 }
 
 
@@ -439,6 +439,14 @@ void crud_print_list_Header(std::string crud_item, std::string emp_name)
 void crud_print_list_Item(std::string item, std::string date)
 {
     std::cout << "> " << item << " | " << date << std::endl;
+}
+void crud_print_list_Item_Index(int i, std::string item, std::string date)
+{
+    std::cout << "[" << i << "] " << item << " | " << date << std::endl;
+}
+void crud_print_ask(std::string ask)
+{
+    std::cout << ask << ": "; // for user input
 }
 
 
