@@ -21,7 +21,6 @@ bool Check_File_Exists(std::string FILE_NAME)
     return fs::exists(p);
 }
 
-
 std::vector<std::string> split_string(const std::string& s, char delimiter) {
     std::vector<std::string> tokens;
     
@@ -36,7 +35,6 @@ std::vector<std::string> split_string(const std::string& s, char delimiter) {
     
     return tokens;
 }
-
 
 std::ofstream create_file_with_dirs(const std::string& filepath) {
     // 1. Determine the directory path
@@ -101,7 +99,6 @@ Department get_department_from_id(int id, std::vector<Department> list_dep)
     }
     return {0, "Null"};
 }
-
 
 
 
@@ -213,8 +210,6 @@ bool write_csv(const std::string& filename, const std::vector<Employee>& list_em
     std::cout << "Data successfully written to " << filename << std::endl;
     return true;
 }
-
-
 
 
 std::vector<Employee> read_csv(const std::string& filename, std::vector<Department> list_dep) {
@@ -346,8 +341,6 @@ std::vector<Employee> read_csv(const std::string& filename, std::vector<Departme
 
 
 
-
-
 bool write_department_csv(const std::string& filename, const std::vector<Department>& list_dep) {
     // Open the file for writing.
     std::ofstream ofs(filename);
@@ -388,7 +381,6 @@ bool write_department_csv(const std::string& filename, const std::vector<Departm
     std::cout << "Data successfully written to " << filename << std::endl;
     return true;
 }
-
 
 std::vector<Department> read_department_csv(const std::string& filename) {
     // no  more Magic Numbers! ^_^
@@ -452,3 +444,28 @@ std::vector<Department> read_department_csv(const std::string& filename) {
 }
 
 
+
+bool write_report(const std::string& filename, const std::vector<std::string>& buffer) {
+    // Open the file for writing.
+    std::ofstream ofs(filename);
+
+    if (!ofs.is_open()) {
+        // NOTE: If this fails, the directories might not exist.
+        std::cout << "Creating File and Dir " << filename << std::endl;
+
+        // create Folder and File if needed
+        ofs = create_file_with_dirs(filename);
+        // reTest
+        if (!ofs.is_open())
+        {
+            std::cerr << "Error: Could not open/create file " << filename << " for writing." << std::endl;
+            std::cerr << "Please ensure the directory path exists." << std::endl;
+            return false;
+        }
+    }
+    // Write buffer to file
+    for (auto &&line : buffer)
+    {
+        ofs << line << std::endl;
+    }
+}

@@ -5,9 +5,7 @@
 #include <sstream>
 #include <ctime>
 
-
 #include "../Model/Dates.h"
-
 
 
 //1. Função para calcular o dia da semana
@@ -25,7 +23,6 @@ int diaSemana(int dia, int mes, int ano) {
 
 //2. Função para calcular o número de dias num mês
 //Esta função deve tratar corretamente anos bissextos.
- 
 int diasNoMes(int mes, int ano) {
     switch(mes){
         case 1: case 3: case 5: case 7: case 8: case 10: case 12: return 31;
@@ -41,7 +38,6 @@ std::string nomeMes(int mes){
                                  "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"};
     return meses[mes-1];
 }
-
 
 
 
@@ -76,7 +72,6 @@ Date parse_date(const std::string& date_str) {
             return result;
         }
     }
-    
     // 3. check mounth size && mounth not Zero!
     if (result.month > 12)
     {
@@ -89,11 +84,8 @@ Date parse_date(const std::string& date_str) {
         result = {0, 0, 0};
         return result;
     }
-    //std::cout << "\tDebug: parse @ return: " << result.day << "-" << result.month << "-" << result.year << "\n";
     return result;
 }
-
-
 
 Date parse_month_year(const std::string& date_str) {
     // Initialize with day = 0 (as requested), month = 0, year = 0
@@ -154,14 +146,13 @@ Date parse_month_year(const std::string& date_str) {
     return result;
 }
 
-
-
-
 std::string parse_to_string(Date d){
     return std::to_string(d.day) + "-" + std::to_string(d.month) + "-" + std::to_string(d.year);
 }
 
 
+
+// Check Dates
 bool date_eq_date(Date date_a, Date date_b){
     if (date_a.day == date_b.day &&
         date_a.month == date_b.month &&
@@ -181,7 +172,7 @@ bool date_in_list(Date &date, std::vector <Date> &list_dates){
     }
     return false;
 }
-
+// Merge Lists of Dates
 std::vector <Date> merge_date_lists(std::vector <Date> &dates_a, std::vector <Date> &dates_b){
     std::vector <Date> all_dates;
     if (dates_a.size() != 0)
@@ -197,10 +188,6 @@ std::vector <Date> merge_date_lists(std::vector <Date> &dates_a, std::vector <Da
         std::cout << "\tDebug Merge Dates - Lists are Empty!" << std::endl;
         return all_dates;
     }
-
-    /*std::cout << "\tDebug Merge Dates" << std::endl;
-    std::cout << "\t\tDate A " << dates_a.size() << std::endl;
-    std::cout << "\t\tDate B " << dates_b.size() << std::endl;*/
 
     for (auto &&d : dates_a)
     {
@@ -218,7 +205,6 @@ std::vector <Date> merge_date_lists(std::vector <Date> &dates_a, std::vector <Da
         }
     }
     // return merged list of Dates!
-    //std::cout << "\t\tAll Dates " << all_dates.size() << std::endl;
     return all_dates;
 }
 

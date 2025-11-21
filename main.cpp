@@ -496,11 +496,20 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
         default:
             break;
         }
-        
     }
 }
 
 
+void generate_report_emp(Employee emp, int year)
+{
+    // get vac & abs for year
+    // get buffer line
+    // save to file (report_emp{id}.txt)
+}
+void generate_report_dep(Department dep, int year)
+{
+    //
+}
 
 
 
@@ -517,8 +526,8 @@ int main()
 
 
     int menu = 0; // Main menu
-    std::string FILE_NAME = "db.csv";
-    std::string FILE_NAME_DEP = "db_dep.csv";
+    std::string FILE_NAME = "DB/db.csv";
+    std::string FILE_NAME_DEP = "DB/db_dep.csv";
 
     // Load Department CSV
     if (Check_File_Exists(FILE_NAME_DEP) == 1)
@@ -1116,7 +1125,6 @@ int main()
             {
                 menu_courses_notes(0);
             }
-                //showPressAnyKey();
                 menu = 0;
                 break;
 
@@ -1124,10 +1132,23 @@ int main()
             {
                 menu_courses_notes(1);
             }
-                //showPressAnyKey();
                 menu = 0;
                 break;
 
+            case 16: // Export Employee's Report
+            {
+
+            }
+                menu = 0;
+                break;
+
+            case 17: // Export Department's Report
+            {
+                
+            }
+                menu = 0;
+                break;
+            
             default:
                 break;
         }

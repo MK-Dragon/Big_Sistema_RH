@@ -111,7 +111,6 @@ bool HResources::checkDepartementIdExists(int dep_id)
     return false;
 }
 
-
 bool HResources::checkVacationOnDepartment(Date day, int id_department)
 {
     for (auto &&emp : get_employes_from_department(id_department))
@@ -158,7 +157,8 @@ void HResources::add_employee(std:: string name)
         next_id,
         name,
         std::vector<Date>{},
-        std::vector<Date>{}
+        std::vector<Date>{},
+        {}
     };
     list_of_employees.push_back(new_emp);
     next_id++;
@@ -248,8 +248,6 @@ std::vector<Date> HResources::get_vacation_days(Employee &emp, int month, int ye
     //std::cout << "Vacation size @ Return: " << vaction_days.size() << "\n";
     return vaction_days;
 }
-
-
 
 
 
@@ -368,6 +366,7 @@ void HResources::change_employees_department(Employee &emp, int id_department)
 
 
 
+// Status for Department
 std::vector <StatusDepartment> HResources::run_status_for_department()
 {
     status_departments.clear();
@@ -394,9 +393,7 @@ std::vector <StatusDepartment> HResources::run_status_for_department()
     }
     return status_departments;
 }
-
-
-
+// Count days in the the year
 int HResources::count_VacAbs_year(std::vector<Date> dates, int year)
 {
     int num_days = 0;
@@ -409,6 +406,7 @@ int HResources::count_VacAbs_year(std::vector<Date> dates, int year)
     }
     return num_days;
 }
+
 
 
 // Couse Add
@@ -429,8 +427,6 @@ void HResources::edit_course(Course &course, std::string name, std::string date)
     course.nome_curso = name;
     course.completion_date = date;
 }
-
-
 
 // Notes
 void HResources::add_note(Employee &emp, Note note)

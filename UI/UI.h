@@ -79,7 +79,7 @@ void printMainMenu(){
 
     std::cout << std::endl;
     std::cout << "(16) Export Employee's Report" << std::endl;
-    std::cout << "(17) Export EVERYONE's Report" << std::endl;
+    std::cout << "(17) Export Department's Report" << std::endl;
 
     // Exit
     std::cout << std::endl;
@@ -97,7 +97,6 @@ void printAddEmployee_name(){
 
     std::cout << "Name: "; // for user input
 }
-
 
 
 
@@ -200,11 +199,6 @@ void printEmployee_Info(Employee emp){
 void printNumberDays(std::string title, std::vector<Date> days){
     std::cout << title << ": " << days.size() << std::endl;
 }
-
-
-
-// Change Emp Department
-
 
 
 
