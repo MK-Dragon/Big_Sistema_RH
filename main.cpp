@@ -337,7 +337,7 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
                 if (emp->courses.size() == 0)
                 {
                     showError("Error: No Courses Found", "Please Add one first.");
-                    break;
+                    menu = 0; break;
                 }
                 for (auto &&x : emp->courses)
                 {
@@ -351,7 +351,7 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
                 if (emp->notes.size() == 0)
                 {
                     showError("Error: No Notes Found", "Please Add one first.");
-                    break;
+                    menu = 0; break;
                 }
                 for (auto &&x : emp->notes)
                 {
@@ -361,8 +361,11 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
                 }
             }
             // get Item to Edit
-            crud_print_ask("Choose Entry to Edit");
+            crud_print_ask("Choose Entry to Edit | (-1) to Cancel");
             int index = get_menu_item(i);
+
+            if (index == -1)
+            { menu = 0; break; }
 
             // get data:
             printEnterValue("Old: " + map[index].first, "New");
@@ -400,7 +403,68 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
         
             case 3: // Remove
         {
-            //
+            crud_print_list_Header("Remove " + crud_item + " from: ", emp->name);
+            
+            // List Options:
+            int i = 0;
+            if (mode == 0) // Courser
+            {
+                if (emp->courses.size() == 0)
+                {
+                    showError("Error: No Courses Found", "Please Add one first.");
+                    menu = 0; break;
+                }
+                for (auto &&x : emp->courses)
+                {
+                    i++;
+                    crud_print_list_Item_Index(i, x.nome_curso, x.completion_date);
+                }
+            }
+            else if (mode == 1) // Notes
+            {
+                if (emp->notes.size() == 0)
+                {
+                    showError("Error: No Notes Found", "Please Add one first.");
+                    menu = 0; break;
+                }
+                for (auto &&x : emp->notes)
+                {
+                    i++;
+                    crud_print_list_Item_Index(i, x.text, x.date);
+                }
+            }
+            // get Item to Remove
+            crud_print_ask("Choose Entry to Edit | (-1) to Cancel");
+            int index = get_menu_item(i);
+
+            if (index == -1)
+            { menu = 0; break; }
+
+            // Delete Data
+            i = 0;
+            if (mode == 0) // Courser
+            {
+                for (auto &&x : emp->courses)
+                {
+                    i++;
+                    if (i == index)
+                    {
+                        hr.remove_course(*emp, x);
+                        break;
+                    }
+                }
+            }
+            else if (mode == 1) // Notes
+            {
+                for (auto &&x : emp->notes)
+                {
+                    i++;
+                    if (i == index)
+                    {
+                        hr.remove_note(*emp, x);
+                    }
+                }
+            }
         }
             menu = 0;break;
 
