@@ -370,6 +370,7 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
             printEnterValue("Old: " + map[index].second, "New (dd-mm-yyyy)");
             Date date = get_date_no_check();
 
+            // Change Data
             i = 0;
             if (mode == 0) // Courser
             {
@@ -379,7 +380,6 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
                     if (i == index)
                     {
                         hr.edit_course(x, txt, parse_to_string(date));
-                        std::cout << "\tDebug " << map[index].first << " | " << map[index].second << std::endl;
                         break;
                     }
                 }
@@ -391,7 +391,7 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
                     i++;
                     if (i == index)
                     {
-                        hr.edit_note(x, map[index].first, map[index].second);
+                        hr.edit_note(x, txt, parse_to_string(date));
                     }
                 }
             }
