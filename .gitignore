@@ -47,3 +47,5 @@ A_Testing/
 tempCodeRunnerFile.cpp
 *.csv
 Reports/*txt
+
+.vscode/

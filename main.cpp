@@ -19,9 +19,11 @@
 
 #include "Utils/CSV_Manager.h"
 #include "Utils/TypeChecking.h"
+#include "Utils/CleanupStrings.h"
 
 
 HResources hr;
+std::vector<char> BLACK_LIST_CHAR = {'|', ',', '+'};
 
 
 int get_emp_id(){
@@ -127,7 +129,7 @@ int get_menu_item(int MAX){
             return num; // exit
         }
         
-        if (num >= 0 && num < MAX) break;
+        if (num >= 0 && num <= MAX) break;
         std::cout << "Invalid input. Please enter a number between 1 and " << MAX << "\n";
     }
     return num;
@@ -317,12 +319,12 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
             // add
             if (mode == 0) // Courser
             {
-                Course course = {txt, parse_to_string(date)};
+                Course course = {cleanString(txt, BLACK_LIST_CHAR), parse_to_string(date)};
                 hr.add_course(*emp, course);
             }
             else if (mode == 1) // Notes
             {
-                Note note = {txt, parse_to_string(date)};
+                Note note = {cleanString(txt, BLACK_LIST_CHAR), parse_to_string(date)};
                 hr.add_note(*emp, note);
             }
             
@@ -388,7 +390,7 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
                     i++;
                     if (i == index)
                     {
-                        hr.edit_course(x, txt, parse_to_string(date));
+                        hr.edit_course(x, cleanString(txt, BLACK_LIST_CHAR), parse_to_string(date));
                         break;
                     }
                 }
@@ -400,7 +402,7 @@ void menu_courses_notes(int mode) // 0 Couses / 1 Notes
                     i++;
                     if (i == index)
                     {
-                        hr.edit_note(x, txt, parse_to_string(date));
+                        hr.edit_note(x, cleanString(txt, BLACK_LIST_CHAR), parse_to_string(date));
                     }
                 }
             }
@@ -570,6 +572,7 @@ int main()
     std::string FILE_NAME = "DB/db.csv";
     std::string FILE_NAME_DEP = "DB/db_dep.csv";
     std::string FOLDER_REPORTS = "Reports/";
+    
 
     // Load Department CSV
     if (Check_File_Exists(FILE_NAME_DEP) == 1)
